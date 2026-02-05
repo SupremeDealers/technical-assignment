@@ -1,0 +1,64 @@
+.taskCard {
+  padding: 12px 14px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  text-align: left;
+}
+
+.taskCard:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.taskCard:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-alpha);
+}
+
+.taskCardDragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.taskCardCreator {
+  font-style: italic;
+}
+
+.taskCardTitle {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1.3;
+}
+
+.taskCardMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-3);
+}
+
+.taskPriority {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.taskPriorityHigh {
+  background: var(--priority-high);
+}
+
+.taskPriorityMedium {
+  background: var(--priority-medium);
+}
+
+.taskPriorityLow {
+  background: var(--priority-low);
+}

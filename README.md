@@ -68,6 +68,12 @@ A **3–5 minute** screen recording that shows:
 pnpm install
 ```
 
+### Seed the database (first time)
+```bash
+cd apps/api && pnpm seed
+```
+Creates a demo board with columns/tasks and users **demo@example.com** / **demo1234**, **alice@example.com** / **alice1234**.
+
 ### Dev (runs both apps)
 ```bash
 pnpm dev
@@ -75,6 +81,8 @@ pnpm dev
 
 - API: http://localhost:4000 (health: `/health`)
 - Web: http://localhost:5173
+
+Log in with **demo@example.com** / **demo1234** to use the pre-seeded board.
 
 ### Tests / Lint / Build
 ```bash
@@ -99,7 +107,7 @@ pnpm build
 🚫 Intentionally missing (candidate implements)
 - Auth (register/login, password hashing, JWT/cookies)
 - DB schema + migrations + seed data
-- All “Team Boards” endpoints and UI
+- All “Team Boards” endpoints and UI (implemented in this repo)
 
 ---
 
