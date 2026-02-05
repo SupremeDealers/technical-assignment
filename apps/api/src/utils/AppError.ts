@@ -1,4 +1,4 @@
-import { ApiErrorCode } from '../errors'; // Import types from starter code errors.ts file
+import { ApiErrorCode } from '../types';
 
 export class AppError extends Error {
   public readonly statusCode: number;
