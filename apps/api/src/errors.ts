@@ -1,3 +1,4 @@
+// Use this file to define common error types and a helper function to send error responses in a consistent format across the API.
 import type { Response } from "express";
 
 export type ApiErrorCode =
