@@ -9,3 +9,4 @@ apps/**/dist
 apps/**/coverage
 apps/**/.env
 apps/api/data
+.pnpm-store/*
