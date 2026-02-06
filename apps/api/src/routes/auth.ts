@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response, Router } from "express";
 import bcrypt from "bcrypt";
-import { loginSchema, registerSchema } from "../schema/auth.schema";
-import { AuthRequest, requireAuth } from "../../middleware/requireAuth";
-import { signToken } from "../../utils/jwt";
-import { prisma } from "../../db/prisma";
-import { sendError } from "../../errors";
+import { loginSchema, registerSchema } from "../schemas/auth.schema";
+import { AuthRequest, requireAuth } from "../middleware/requireAuth";
+import { signToken } from "../utils/jwt";
+import { prisma } from "../db/prisma";
+import { sendError } from "../errors";
 
 const router = Router();
 
