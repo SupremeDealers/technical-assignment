@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import { sendError } from "./errors";
 import authRoutes from "./routes/auth";
-import taskRoutes from './routes/task';
+import taskRoutes from "./routes/task";
+import commentsRoutes from "./routes/comments";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
+app.use("/api", commentsRoutes);
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
