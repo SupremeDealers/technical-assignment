@@ -6,7 +6,7 @@ import { db } from '../db';
 import { users } from '../db/schema';
 import { catchAsync } from '../utils/catchAsync';
 import { AppError } from '../utils/AppError';
-import { loginSchema, registerSchema } from '../request_validations/auth';
+import { loginSchema as loginValidation, registerSchema as registerValidation } from '../request_validations';
 import 'dotenv/config';
 
 //configurations
@@ -24,7 +24,7 @@ export const register = catchAsync(async (req: Request, res: Response) => {
   * 5. Generate JWT Token
   * 6. Send Response with user data and Token
   */
-  const { error, value } = registerSchema.validate(req.body);
+  const { error, value } = registerValidation.validate(req.body);
   if (error) throw error;
 
   const existingUser = await db.select().from(users).where(eq(users.email, value.email)).get();
@@ -38,17 +38,26 @@ export const register = catchAsync(async (req: Request, res: Response) => {
     email: value.email,
     passwordHash: hashedPassword,
     name: value.name || 'Anonymous',
+    role: value.role,
   }).returning({
     id: users.id,
     email: users.email,
     name: users.name,
+    role: users.role,
     createdAt: users.createdAt,
   });
 
 
-  const token = jwt.sign({ userId: newUser.id }, JWT_SECRET as string, { expiresIn: '1d' });
+  const token = jwt.sign({ userId: newUser.id, role: newUser.role }, JWT_SECRET as string, { expiresIn: '1d' });
 
-  res.status(201).json({ user: newUser, token });
+  res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 24 * 60 * 60 * 1000, 
+  })
+  .status(201)
+  .json({ user: newUser, token });
 });
 
 export const login = catchAsync(async (req: Request, res: Response) => {
@@ -61,7 +70,7 @@ export const login = catchAsync(async (req: Request, res: Response) => {
   * 5. Send Response with user data and Token
   */
 
-  const { error, value } = loginSchema.validate(req.body);
+  const { error, value } = loginValidation.validate(req.body);
   if (error) throw error;
 
   const user = await db.select().from(users).where(eq(users.email, value.email)).get();
@@ -74,13 +83,20 @@ export const login = catchAsync(async (req: Request, res: Response) => {
     throw new AppError(401, 'UNAUTHORIZED', 'Invalid email or password');
   }
 
-  const token = jwt.sign({ userId: user.id }, JWT_SECRET as string, { expiresIn: '1d' });
+  const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET as string, { expiresIn: '1d' });
 
-  res.json({
+  res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 24 * 60 * 60 * 1000,
+  })
+  .status(200).json({
     user: {
       id: user.id,
       email: user.email,
       name: user.name,
+      role: user.role,
       createdAt: user.createdAt,
     },
     token,

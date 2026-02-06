@@ -5,6 +5,9 @@ import { sql } from 'drizzle-orm';
 // Priority enum
 export const priorityEnum = ['low', 'medium', 'high'] as const;
 export type Priority = typeof priorityEnum[number];
+// userRole enum
+export const userRoleEnum = ['user', 'admin'] as const;
+export type UserRole = typeof userRoleEnum[number];
 
 //Users Table
 export const users = sqliteTable('users', {
@@ -12,6 +15,7 @@ export const users = sqliteTable('users', {
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
   name: text('name'),
+  role: text('role', { enum: userRoleEnum }).notNull().default('user'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
@@ -27,7 +31,6 @@ export const columns = sqliteTable('columns', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
   boardId: text('board_id').references(() => boards.id, { onDelete: 'cascade' }).notNull(),
   name: text('name').notNull(),
-  position: integer('position').notNull(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 

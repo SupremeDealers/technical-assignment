@@ -5,10 +5,14 @@ import { errorHandler } from "./middleware/errorHandler";
 import { AppError } from "./utils/AppError";
 import authRoutes from "./routes/authRoutes";
 import "dotenv/config"
+import cookieParser from 'cookie-parser';
+
+
 
 const app = express();
 const port = Number(process.env.PORT);
 app.use(cors({ origin: true, credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
 
 // Core base routes
