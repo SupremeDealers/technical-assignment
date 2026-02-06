@@ -4,6 +4,7 @@ import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler";
 import { AppError } from "./utils/AppError";
 import authRoutes from "./routes/authRoutes";
+import adminRoutes from './routes/adminRoutes'
 import "dotenv/config"
 import cookieParser from 'cookie-parser';
 
@@ -39,7 +40,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/auth", authRoutes);
-
+app.use('/admin', adminRoutes);
 /**
  * Example: how we want errors shaped.
  * Candidates should re-use this for their implementation.

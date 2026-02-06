@@ -19,29 +19,13 @@ export const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-//Task Controller based validations
-export const createTaskSchema = Joi.object({
-  columnId: Joi.string().required(),
-  title: Joi.string().required(),
-  description: Joi.string().optional().allow(''),
-  priority: Joi.string().valid('low', 'medium', 'high').default('medium'),
+
+// Admin Controller related validations
+export const createBoardSchema = Joi.object({
+  name: Joi.string().required().min(3).max(50),
 });
 
-export const updateTaskSchema = Joi.object({
-  title: Joi.string().optional(),
-  description: Joi.string().optional().allow(''),
-  priority: Joi.string().valid('low', 'medium', 'high').optional(),
-  columnId: Joi.string().optional(), // Used when moving task between columns
-});
-
-export const taskQuerySchema = Joi.object({
-  columnId: Joi.string().optional(),
-  search: Joi.string().optional().allow(''),
-  page: Joi.number().min(1).default(1),
-  limit: Joi.number().min(1).max(100).default(20),
-});
-
-//Comment controller based validations
-export const createCommentSchema = Joi.object({
-  content: Joi.string().required(),
+export const createColumnSchema = Joi.object({
+  boardId: Joi.string().required(),
+  name: Joi.string().required().min(2).max(30),
 });
