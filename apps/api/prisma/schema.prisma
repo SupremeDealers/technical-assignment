@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+
+  boards       Board[]
+  comments     Comment[]
+}
+
+model Board {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId  String
+  createdAt DateTime @default(now())
+
+  owner    User     @relation(fields: [ownerId], references: [id])
+  columns  Column[]
+}
+
+model Column {
+  id        String   @id @default(cuid())
+  name      String
+  order     Int
+  boardId  String
+  createdAt DateTime @default(now())
+
+  board    Board   @relation(fields: [boardId], references: [id])
+  tasks    Task[]
+
+  @@unique([boardId, order])
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  order       Int
+  columnId   String
+  createdAt   DateTime @default(now())
+
+  column     Column    @relation(fields: [columnId], references: [id])
+  comments   Comment[]
+
+  @@index([columnId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  taskId   String
+  authorId String
+  createdAt DateTime @default(now())
+
+  task      Task   @relation(fields: [taskId], references: [id])
+  author    User   @relation(fields: [authorId], references: [id])
+
+  @@index([taskId])
+}
