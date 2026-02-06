@@ -14,6 +14,17 @@ export type ApiError = {
   details?: unknown;
 };
 
+export class ServiceError extends Error {
+  constructor(
+    public status: number,
+    public code: ApiErrorCode,
+    message: string,
+    public details?: unknown
+  ) {
+    super(message);
+  }
+}
+
 export function sendError(res: Response, status: number, error: ApiError) {
   return res.status(status).json({ error });
 }

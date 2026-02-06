@@ -9,3 +9,14 @@ describe("GET /health", () => {
     expect(typeof res.body.ts).toBe("string");
   });
 });
+
+describe('GET /tasks', () => {
+  it('returns tasks', async () => {
+    const res = await request(app)
+      .get('/tasks')
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(res.status).toBe(200)
+    expect(res.body.length).toBeGreaterThan(0)
+  })
+})
