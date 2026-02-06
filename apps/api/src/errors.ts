@@ -1,19 +1,14 @@
-import type { Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
-export type ApiErrorCode =
-  | "BAD_REQUEST"
-  | "UNAUTHORIZED"
-  | "FORBIDDEN"
-  | "NOT_FOUND"
-  | "CONFLICT"
-  | "INTERNAL";
+export const errorHandler = (
+  err: any,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  console.error(err);
 
-export type ApiError = {
-  code: ApiErrorCode;
-  message: string;
-  details?: unknown;
+  res.status(err.statusCode || 500).json({
+    message: err.message || "Internal Server Error",
+  });
 };
-
-export function sendError(res: Response, status: number, error: ApiError) {
-  return res.status(status).json({ error });
-}

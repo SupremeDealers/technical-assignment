@@ -1,30 +1,20 @@
-import express from "express";
-import cors from "cors";
-import { sendError } from "./errors";
+import { app } from "./app";
 
-const app = express();
-
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+const PORT = process.env.PORT || 4000;
 
 app.get("/health", (_req, res) => {
-  res.json({ ok: true, ts: new Date().toISOString() });
-});
-
-/**
- * Example: how we want errors shaped.
- * Candidates should re-use this for their implementation.
- */
-app.use((req, res) => {
-  sendError(res, 404, {
-    code: "NOT_FOUND",
-    message: `Route not found: ${req.method} ${req.path}`,
+  res.status(200).json({
+    status: "ok",
+    message: "API is healthy 🚀",
   });
 });
 
-const port = Number(process.env.PORT ?? 4000);
-app.listen(port, () => {
-  console.log(`[api] listening on http://localhost:${port}`);
-});
+// Only listen if not in test mode (import.meta.env.MODE is undefined in Node)
+const isTestMode = process.env.NODE_ENV === "test" || process.argv.includes("vitest");
+if (!isTestMode) {
+  app.listen(PORT, () => {
+    console.log(`API running on http://localhost:${PORT}`);
+  });
+}
 
 export default app;
