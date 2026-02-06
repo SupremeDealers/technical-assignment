@@ -1,174 +1,177 @@
-# Take‑Home Starter — React + Node (Mid-level)
+# Task Management Application
 
-This repo is the **starter template** for the take‑home test “Team Boards” (tasks + comments).
-It gives candidates a consistent baseline (scripts, linting, tests, CI), while leaving the actual feature work to them.
+A modern task management application with a beautiful UI and powerful features.
 
----
+## Features
 
-## What the candidate builds (core scope)
+- **Task Management**: Create, edit, delete, and move tasks between columns
+- **Columns**: Manage columns (add, edit, delete) to organize your tasks
+- **Comments**: Add comments to tasks for better communication
+- **Search**: Search tasks by title or description
+- **Pagination**: Navigate through tasks with pagination (5 tasks per page)
+- **Drag and Drop**: Easily move tasks between columns using drag and drop
+- **User Authentication**: Secure login and registration with JWT tokens
+- **Responsive Design**: Works on desktop and mobile devices
 
-A small kanban-style board with **tasks** and **comments**, backed by a **Node API** (auth + REST) and a **React app**.
+## Tech Stack
 
-### Core requirements (must-have)
-**Backend**
-- Node + TypeScript (Express or Fastify)
-- Local persistence (SQLite recommended)
-- Validation (e.g., Zod/Joi)
-- Auth (JWT or session cookie)
-- Pagination + search on tasks
-- Seed script creates demo board/columns/tasks/users
-- Consistent error shape
+### Frontend
+- React 18
+- TypeScript
+- Tailwind CSS
+- React Router
+- TanStack Query
 
-**Frontend**
-- React + TypeScript (Vite)
-- Routing (any)
-- Data fetching/caching (TanStack Query or equivalent)
-- Auth screens (register/login)
-- Board UI (columns + task cards)
-- Create/edit task, move task between columns (DnD or dropdown)
-- Task details with comments + add comment
-- Loading/error/empty states
-- Basic accessibility (labels, keyboard, contrast)
+### Backend
+- Node.js
+- Express
+- TypeScript
+- SQLite (in-memory storage)
+- JWT authentication
 
-### Demo video (required)
-A **3–5 minute** screen recording that shows:
-1) Login/register flow  
-2) Create a task + move it between columns  
-3) Add a comment  
-4) Tests running (`pnpm test`) or CI status  
-5) One decision + tradeoff (30 seconds)
+## Getting Started
 
----
+### Prerequisites
 
-## Submission logistics (recommended)
+- Node.js (v20)
+- pnpm (package manager)
 
-### Preferred: Starter repo + PR (consistent diffs)
-- Candidate works on a branch and opens a PR (or submits their repo link).
-- Reviewers evaluate diff, CI, and local run.
+### Installation
 
-> NOTE: If you prefer “repo + video” without PRs, that’s fine too — but you’ll lose the consistency of diff-based review.
-> A good compromise is **PR + video**.
+1. Install dependencies:
 
-### IP / Fair play statement (include in the email)
-- This is a simulated exercise; the company will not ship the submission.
-- Candidate retains rights to their submission.
-- No proprietary code from past employers.
-- External libraries are fine; cite major references in README.
-
----
-
-## How to run this starter
-
-### Prereqs
-- Node (see `.nvmrc`)
-- pnpm (recommended)
-
-### Install
 ```bash
 pnpm install
 ```
 
-### Dev (runs both apps)
-```bash
-pnpm dev
-```
+2. Build the application:
 
-- API: http://localhost:4000 (health: `/health`)
-- Web: http://localhost:5173
-
-### Tests / Lint / Build
 ```bash
-pnpm test
-pnpm lint
-pnpm typecheck
 pnpm build
 ```
 
----
+### Running the Application
 
-## What’s included vs. what’s intentionally missing
+1. Start the backend server:
 
-✅ Included
-- Monorepo workspace wiring
-- API skeleton (Express) with health route and a consistent error helper
-- React skeleton with TanStack Query wired
-- Example tests (API + Web)
-- ESLint/Prettier baseline
-- GitHub Actions CI workflow
-
-🚫 Intentionally missing (candidate implements)
-- Auth (register/login, password hashing, JWT/cookies)
-- DB schema + migrations + seed data
-- All “Team Boards” endpoints and UI
-
----
-
-## Evaluation rubric (100 pts)
-
-**Architecture & Code Quality (25)**
-- Structure, readability, separation of concerns, types
-
-**Backend (25)**
-- REST design, validation, auth, pagination/search, error handling
-
-**Frontend (25)**
-- UX flow end-to-end, data fetching/mutations, states, accessibility
-
-**Testing & Tooling (15)**
-- Meaningful tests, lint/typecheck/build passing
-
-**Polish & Product Thinking (10)**
-- README clarity, tradeoffs, small UX touches
-
----
-
-## API contract expectations (guide)
-
-Error shape:
-```json
-{
-  "error": {
-    "code": "BAD_REQUEST",
-    "message": "Invalid payload",
-    "details": [{ "path": "title", "issue": "Required" }]
-  }
-}
+```bash
+cd apps/api
+pnpm dev
 ```
 
----
+2. Start the frontend development server:
 
-## Suggested endpoints (candidate implements)
+```bash
+cd apps/web
+pnpm dev
+```
 
-Auth:
-- POST `/auth/register`
-- POST `/auth/login`
+3. Open your browser and navigate to `http://localhost:5173`
 
-Boards:
-- GET `/boards/:boardId`
-- GET `/boards/:boardId/columns` (include tasks count)
-- POST `/boards/:boardId/columns`
+### Running Tests
 
-Columns:
-- PATCH `/columns/:columnId`
-- DELETE `/columns/:columnId`
+```bash
+pnpm test
+```
 
-Tasks:
-- GET `/columns/:columnId/tasks?search=&page=&limit=&sort=createdAt|priority`
-- POST `/columns/:columnId/tasks`
-- PATCH `/tasks/:taskId` (partial updates + moving columns)
-- DELETE `/tasks/:taskId`
+## Project Structure
 
-Comments:
-- GET `/tasks/:taskId/comments`
-- POST `/tasks/:taskId/comments`
+```
+.
+├── apps/
+│   ├── api/              # Backend API
+│   │   ├── src/
+│   │   │   ├── auth/     # Authentication module
+│   │   │   ├── routes/   # API endpoints
+│   │   │   └── index.ts  # Server entry point
+│   │   └── package.json  # API dependencies
+│   └── web/              # Frontend application
+│       ├── src/
+│       │   ├── api/      # API client
+│       │   ├── auth/     # Authentication context
+│       │   ├── pages/    # Page components
+│       │   └── ui/       # UI components
+│       └── package.json  # Frontend dependencies
+├── package.json          # Root package.json
+└── README.md             # This file
+```
 
----
+## API Endpoints
 
-## Reviewer quick checklist (internal)
-- `pnpm install && pnpm dev` works
-- Auth works and blocks unauth’d access
-- Create/edit/move task works
-- Search + pagination works
-- Comments view/add works
-- CI is green; tests are meaningful
-- README explains tradeoffs + known limitations
+### Authentication
+
+- `POST /auth/login` - Login user
+- `POST /auth/register` - Register new user
+
+### Columns
+
+- `GET /columns/:columnId` - Get column details
+- `POST /columns` - Create new column
+- `PUT /columns/:columnId` - Update column
+- `DELETE /columns/:columnId` - Delete column
+
+### Tasks
+
+- `GET /tasks/columns/:columnId/tasks?page=1&limit=5&search=&sort=` - Get tasks for column
+- `POST /tasks/columns/:columnId/tasks` - Create new task
+- `PUT /tasks/:taskId` - Update task
+- `DELETE /tasks/:taskId` - Delete task
+
+### Comments
+
+- `GET /comments/tasks/:taskId/comments` - Get task comments
+- `POST /comments/tasks/:taskId/comments` - Create new comment
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Run tests
+5. Create a pull request
+
+## Tradeoffs and Limitations
+
+### Tradeoffs
+
+1. **In-Memory Storage**: The application uses in-memory storage for data persistence. This means all data is lost when the server is restarted. This was a tradeoff for simplicity and quick development.
+
+2. **JWT Token Storage**: JWT tokens are stored in localStorage, which is vulnerable to XSS attacks. A more secure approach would be to use HTTP-only cookies.
+
+3. **No Data Validation**: The application has minimal data validation. For example, there's no validation for task priorities or comment lengths.
+
+4. **Limited Error Handling**: Error handling is basic. The application shows generic error messages, and there's no retry mechanism for failed API calls.
+
+### Limitations
+
+1. **Single User Workspace**: The application currently only supports a single user workspace. Multiple users can't collaborate on the same board.
+
+2. **No Task Filters**: There are no filters for tasks (e.g., by priority, status, or due date).
+
+3. **No Task Due Dates**: Tasks don't have due dates. This is a basic feature that's missing.
+
+4. **No File Attachments**: Tasks don't support file attachments.
+
+5. **No Real-Time Updates**: The application doesn't support real-time updates. Users have to refresh the page to see changes made by others.
+
+6. **Limited Search**: The search functionality is basic. It only searches for tasks by title or description.
+
+### Future Improvements
+
+1. **Persistent Storage**: Replace in-memory storage with a database like PostgreSQL or MongoDB.
+
+2. **Improved Security**: Use HTTP-only cookies for JWT token storage and add CSRF protection.
+
+3. **Data Validation**: Add comprehensive data validation for all API endpoints.
+
+4. **Enhanced Error Handling**: Improve error handling with more descriptive messages and retry mechanisms.
+
+5. **Collaboration Features**: Add support for multiple users and real-time updates using WebSockets.
+
+6. **Advanced Task Management**: Add task filters, due dates, and file attachments.
+
+7. **Improved Search**: Add advanced search functionality with filters for task properties.
+
+## License
+
+This project is licensed under the MIT License.
