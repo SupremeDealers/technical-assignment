@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { sendError } from "./errors";
 import authRoutes from "./routes/auth";
+import boardRoutes from "./routes/boards";
 import taskRoutes from "./routes/task";
 import commentsRoutes from "./routes/comments";
 
@@ -11,6 +12,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api", boardRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", commentsRoutes);
 
