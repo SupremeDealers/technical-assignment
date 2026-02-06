@@ -23,7 +23,13 @@ export async function requireAuth(
 
   try {
     const { id } = verifyToken(token) as any;
-    req.user = await prisma.user.findUnique({ id }).select({ id: true });
+    const user = await prisma.user.findUnique({
+      where: { id: id },
+      select: { id: true, email: true },
+    });
+    if (user) {
+      req.user = user;
+    }
     next();
   } catch {
     res.status(401).json({

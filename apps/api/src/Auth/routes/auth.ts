@@ -32,6 +32,11 @@ router.post(
           name: data.name,
           password: hash,
         },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
       });
 
       const token = signToken({
@@ -42,11 +47,7 @@ router.post(
       res.status(201).json({
         data: {
           token,
-          user: {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-          },
+          user,
         },
       });
     } catch (err) {
@@ -70,9 +71,9 @@ router.post("/login", async (req, res, next) => {
       });
     }
 
-    const valid = await bcrypt.compare(data.password, user.password);
+    const isValidPass = await bcrypt.compare(data.password, user.password);
 
-    if (!valid) {
+    if (!isValidPass) {
       return res.status(401).json({
         code: "INVALID_CREDENTIALS",
         message: `Invalid email or password: ${req.method} ${req.path}`,
@@ -82,6 +83,7 @@ router.post("/login", async (req, res, next) => {
     const token = signToken({
       id: user.id,
       email: user.email,
+      name: user.name,
     });
 
     res.json({
