@@ -4,6 +4,7 @@ import { loginSchema, registerSchema } from "../schema/auth.schema";
 import { AuthRequest, requireAuth } from "../../middleware/requireAuth";
 import { signToken } from "../../utils/jwt";
 import { prisma } from "../../db/prisma";
+import { sendError } from "../../errors";
 
 const router = Router();
 
@@ -65,8 +66,8 @@ router.post("/login", async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(401).json({
-        code: "INVALID_CREDENTIALS",
+      return sendError(res, 401, {
+        code: "FORBIDDEN",
         message: `Invalid email or password: ${req.method} ${req.path}`,
       });
     }
@@ -74,8 +75,8 @@ router.post("/login", async (req, res, next) => {
     const isValidPass = await bcrypt.compare(data.password, user.password);
 
     if (!isValidPass) {
-      return res.status(401).json({
-        code: "INVALID_CREDENTIALS",
+      return sendError(res, 401, {
+        code: "FORBIDDEN",
         message: `Invalid email or password: ${req.method} ${req.path}`,
       });
     }

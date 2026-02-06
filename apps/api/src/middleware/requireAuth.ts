@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verifyToken } from "../utils/jwt";
 import { prisma } from "../db/prisma";
+import { sendError } from "../errors";
 
 export interface AuthRequest extends Request {
   user?: { id: string; email: string };
@@ -13,8 +14,8 @@ export async function requireAuth(
 ) {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(401).json({
-      code: "MISSING TOKEN",
+    return sendError(res, 401, {
+      code: "NOT_FOUND",
       message: `Authorization token required: ${req.method} ${req.path}`,
     });
   }
@@ -32,7 +33,7 @@ export async function requireAuth(
     }
     next();
   } catch {
-    res.status(401).json({
+    sendError(res, 401, {
       code: "UNAUTHORIZED",
       message: `Request is not authorized: ${req.method} ${req.path}`,
     });
