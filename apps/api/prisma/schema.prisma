@@ -1,3 +1,12 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -12,11 +21,11 @@ model Board {
 }
 
 model Column {
-  id      String @id @default(cuid())
+  id      String  @id @default(cuid())
   title   String
   order   Int
   boardId String
-  board   Board  @relation(fields: [boardId], references: [id])
+  board   Board   @relation(fields: [boardId], references: [id])
   tasks   Task[]
 }
 
@@ -24,7 +33,7 @@ model Task {
   id        String   @id @default(cuid())
   title     String
   columnId  String
-  column    Column  @relation(fields: [columnId], references: [id])
+  column    Column   @relation(fields: [columnId], references: [id])
   comments  Comment[]
   createdAt DateTime @default(now())
 }
