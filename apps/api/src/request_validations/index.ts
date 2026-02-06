@@ -26,6 +26,38 @@ export const createBoardSchema = Joi.object({
 });
 
 export const createColumnSchema = Joi.object({
-  boardId: Joi.string().required(),
+  name: Joi.string().min(2).max(30).required(),
+});
+
+export const updateColumnSchema = Joi.object({
   name: Joi.string().required().min(2).max(30),
+});
+
+// Comment Controller related validations
+export const createCommentSchema = Joi.object({
+  content: Joi.string().required().min(1).trim().messages({
+    'string.min': 'Content can not be empty',
+  }),
+});
+
+//Task controller related validation
+export const createTaskSchema = Joi.object({
+  title: Joi.string().required().min(1),
+  description: Joi.string().optional().allow(''),
+  priority: Joi.string().valid('low', 'medium', 'high').default('medium'),
+});
+
+
+export const updateTaskSchema = Joi.object({
+  title: Joi.string().optional().min(1),
+  description: Joi.string().optional().allow(''),
+  priority: Joi.string().valid('low', 'medium', 'high').optional(),
+  columnId: Joi.string().optional(), 
+});
+
+export const taskQuerySchema = Joi.object({
+  search: Joi.string().optional().allow(null, '').trim(),
+  page: Joi.number().integer().min(1).empty(Joi.valid(null, '')).default(1),
+  limit: Joi.number().integer().min(1).max(100).empty(Joi.valid(null, '')).default(20),
+  sort: Joi.string().valid('createdAt', 'priority').empty(Joi.valid(null, '')).default('createdAt'),
 });

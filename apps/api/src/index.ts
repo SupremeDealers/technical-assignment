@@ -1,10 +1,14 @@
 import express from "express";
 import cors from "cors";
-// import { sendError } from "./errors";
 import { errorHandler } from "./middleware/errorHandler";
 import { AppError } from "./utils/AppError";
 import authRoutes from "./routes/authRoutes";
-import adminRoutes from './routes/adminRoutes'
+import adminRoutes from './routes/adminRoutes';
+import boardRoutes from './routes/boardRoutes';
+import columnTaskRoutes from './routes/columnTaskRoutes';
+import taskRoutes from './routes/taskRoutes';
+
+
 import "dotenv/config"
 import cookieParser from 'cookie-parser';
 
@@ -41,6 +45,9 @@ app.get("/health", (_req, res) => {
 
 app.use("/auth", authRoutes);
 app.use('/admin', adminRoutes);
+app.use('/boards', boardRoutes);
+app.use('/tasks', taskRoutes);
+app.use('/columns/:columnId/tasks', columnTaskRoutes); 
 /**
  * Example: how we want errors shaped.
  * Candidates should re-use this for their implementation.

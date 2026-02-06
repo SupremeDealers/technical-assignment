@@ -4,7 +4,7 @@ import { boards, columns } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { catchAsync } from '../utils/catchAsync';
 import { AppError } from '../utils/AppError';
-import { createBoardSchema, createColumnSchema } from '../request_validations';
+import { createBoardSchema, createColumnSchema, updateColumnSchema } from '../request_validations';
 
 //creation related controller
 export const createBoard = catchAsync(async (req: Request, res: Response) => {
@@ -19,14 +19,20 @@ export const createBoard = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const createColumn = catchAsync(async (req: Request, res: Response) => {
+  const { boardId } = req.params;
   const { error, value } = createColumnSchema.validate(req.body);
   if (error) throw error;
 
-  const board = await db.select().from(boards).where(eq(boards.id, value.boardId)).get();
-  if (!board) throw new AppError(404, 'NOT_FOUND', 'Board not found');
+  const board = await db
+    .select()
+    .from(boards)
+    .where(eq(boards.id, boardId))
+    .get();  
+  
+   if (!board) throw new AppError(404, 'NOT_FOUND', 'Board not found');
 
   const [newColumn] = await db.insert(columns).values({
-    boardId: value.boardId,
+    boardId: boardId,
     name: value.name,
   }).returning();
 
@@ -56,4 +62,23 @@ export const deleteColumn = catchAsync(async (req: Request, res: Response) => {
   }
 
   res.status(200).json({success:true,message:"Column deleted successfully"});
+});
+
+// Column Update controller
+export const updateColumn = catchAsync(async (req: Request, res: Response) => {
+  const { columnId } = req.params;
+  const { error, value } = updateColumnSchema.validate(req.body);
+  if (error) throw error;
+
+  const [updatedColumn] = await db
+    .update(columns)
+    .set({ name: value.name })
+    .where(eq(columns.id, columnId))
+    .returning();
+
+  if (!updatedColumn) {
+    throw new AppError(404, 'NOT_FOUND', 'Column not found');
+  }
+
+  res.json(updatedColumn);
 });

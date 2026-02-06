@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createBoard, createColumn, deleteBoard, deleteColumn } from '../controllers/adminController';
+import { createBoard, createColumn, deleteBoard, deleteColumn,updateColumn } from '../controllers/adminController';
 import { authenticate, isAdmin } from '../middleware/auth';
 
 const router = Router();
@@ -10,7 +10,8 @@ router.use(authenticate, isAdmin);
 router.post('/boards', createBoard);
 router.delete('/boards/:boardId', deleteBoard);
 
-router.post('/columns', createColumn);
+router.post('/boards/:boardId/columns', createColumn); // add column of a particular board
+router.patch('/columns/:columnId', updateColumn);
 router.delete('/columns/:columnId', deleteColumn);
 
 export default router;
