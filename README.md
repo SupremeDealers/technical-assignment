@@ -251,3 +251,20 @@ Comments:
 4. **Test coverage**: Add integration tests, E2E tests, aim for >80% coverage
 5. **Performance**: Implement virtual scrolling, query debouncing, React.memo optimizations
 6. **Docker**: Add Dockerfile and docker-compose for easy deployment
+
+---
+
+## Demo Video
+
+**Watch the 5-minute demo**: [Team Boards Demo Video](https://drive.google.com/file/d/1YGyFRrgwp36yY1E7R-YnCF6D5IJZTwXw/view?usp=sharing)
+
+The demo showcases:
+- Authentication flow (register/login)
+- Task creation and management
+- Drag-and-drop functionality
+- Comments system
+- Search and filtering
+- Tests running
+- Key architectural decisions
+
+---
