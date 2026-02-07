@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main, assignment-dev, assignment-submit ]
+    branches: [ main, assignment-dev, assignment-submission ]
 
 jobs:
   build-test:
