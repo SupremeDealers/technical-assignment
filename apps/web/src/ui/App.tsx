@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { BoardListPage } from "../pages/BoardListPage";
+import { Spinner } from "../components/Spinner";
 
 export function App() {
   const { user, isLoading } = useAuth();
@@ -20,11 +21,7 @@ export function App() {
   }, [user, isLoading]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-gray-600">Loading...</p>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (!user) {

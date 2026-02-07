@@ -35,8 +35,8 @@ app.use((req, res) => {
 
 export default app;
 
-// Only start server if this is the main module (not imported by tests)
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Only start server if not running in tests
+if (!process.env.VITEST) {
   const port = Number(process.env.PORT ?? 4000);
   app.listen(port, () => {
     console.log(`[api] listening on http://localhost:${port}`);
