@@ -39,9 +39,9 @@ export default function ModalWrapper({
           <h3 className="text-lg font-semibold">{title}</h3>
           <button
             onClick={onClose}
-            className="text-sm px-2 py-1 rounded border"
+            className="text-sm text-red-500 hover:text-red-700 hover:border border-red-700 px-2 py-1 rounded-full"
           >
-            Esc
+            X
           </button>
         </div>
 

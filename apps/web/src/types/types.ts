@@ -18,14 +18,16 @@ export interface Task {
   column: Column;
 }
 
+export interface Meta {
+  page: number;
+  limit: number;
+  total: number;
+  hasNext: boolean;
+}
+
 export interface Tasks {
   tasks: Task[];
-  meta: {
-    page: number;
-    limit: number;
-    total: number;
-    hasNext: boolean;
-  };
+  meta: Meta;
 }
 export interface Profile {
   id: string;
