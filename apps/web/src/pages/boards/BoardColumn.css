@@ -1,0 +1,111 @@
+.board-column {
+  width: 300px;
+  min-width: 300px;
+  background-color: var(--color-bg-dark);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.board-column-over {
+  background-color: var(--color-primary-light);
+}
+
+.board-column-header {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.board-column-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.board-column-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-xs);
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.board-column-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-sm);
+  min-height: 100px;
+}
+
+.board-column-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.board-column-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.board-column-empty {
+  text-align: center;
+  padding: var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+.board-column-empty p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.board-column-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: var(--space-md);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  border-top: 1px solid var(--color-border);
+}
+
+.board-column-add:hover {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+}
+
+.add-task-form {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.add-task-form .form-field {
+  margin-bottom: var(--space-sm);
+}
+
+.add-task-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
