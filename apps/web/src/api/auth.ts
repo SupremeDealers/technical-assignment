@@ -12,8 +12,3 @@ export const registerApi = async (data: any) => {
   return res.data;
 };
 
-export const logoutApi = async () => {
-  // If you implemented a logout endpoint in backend, call it here.
-  // Otherwise, we just rely on client-side cleanup.
-  // await api.post('/auth/logout');
-};

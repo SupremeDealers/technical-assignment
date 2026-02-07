@@ -10,7 +10,7 @@ router.use(authenticate, isAdmin);
 router.post('/boards', createBoard);
 router.delete('/boards/:boardId', deleteBoard);
 
-router.post('/boards/:boardId/columns', createColumn); // add column of a particular board
+router.post('/boards/:boardId/columns', createColumn);
 router.patch('/columns/:columnId', updateColumn);
 router.delete('/columns/:columnId', deleteColumn);
 
