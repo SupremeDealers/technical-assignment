@@ -1,5 +1,5 @@
 import api from './axios';
-import { AuthResponse, User } from '../types/auth';
+import { AuthResponse } from '../types/auth';
 
 
 export const loginApi = async (data: any) => {

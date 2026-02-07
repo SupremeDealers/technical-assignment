@@ -9,18 +9,16 @@ const JWT_SECRET = process.env.JWT_SECRET;
 declare global {
   namespace Express {
     interface Request {
-      user?: { userId: string };
+      user?: { userId: string,role?: 'user' | 'admin'; };
     }
   }
 }
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
 //   const authHeader = req.headers.authorization;
-
 //   if (!authHeader || !authHeader.startsWith('Bearer ')) {
 //     return next(new AppError(401, 'UNAUTHORIZED', 'Missing or invalid token'));
 //   }
-
 //   const token = authHeader.split(' ')[1];
 
   const token = req.cookies?.token;
@@ -28,11 +26,14 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   if (!token) {
     return next(new AppError(401, 'UNAUTHORIZED', 'Authentication required'));
   }
+  if (!JWT_SECRET) {
+    return next(new AppError(500, 'INTERNAL', 'JWT_SECRET is not configured'));
+  }
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string, role: 'user' | 'admin';};
+    const decoded = jwt.verify(token, JWT_SECRET) as unknown as { userId: string, role: 'user' | 'admin';};
     req.user = {userId: decoded.userId, role: decoded.role, };
     next();
-  } catch (err) {
+  } catch {
     return next(new AppError(401, 'UNAUTHORIZED', 'Invalid or expired token'));
   }
 };

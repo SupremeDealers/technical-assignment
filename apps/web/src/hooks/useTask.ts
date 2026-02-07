@@ -34,7 +34,7 @@ export const useUpdateTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.updateTaskApi,
-    onSuccess: (data) => {
+    onSuccess: (_data) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] }); 
       toast.success('Task updated');
     },

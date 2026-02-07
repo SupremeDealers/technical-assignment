@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useQuery } from '@tanstack/react-query'; // Import useQuery
-import { getTasksApi } from '../api/task'; // Import the API function
+import { useQuery } from '@tanstack/react-query'; 
+import { getTasksApi } from '../api/task';
 import { useUpdateTask, useDeleteTask, useComments, useAddComment } from '../hooks/useTask';
-import { Trash2, Save, ArrowLeft, MessageSquare, Clock, Loader2 } from 'lucide-react';
-import { cn } from '../utils/cn';
+import { Trash2, Save, MessageSquare, Clock, Loader2 } from 'lucide-react';
 
 export default function TaskPage() {
   const { state } = useLocation();
@@ -18,7 +18,7 @@ export default function TaskPage() {
   const initialTask = state?.task;
   const { data: columnTasks, isLoading: isLoadingTask } = useQuery({
     queryKey: ['tasks', columnId], 
-    queryFn: () => getTasksApi({ columnId: columnId!, limit: 100 }),
+    queryFn: () => getTasksApi({ columnId: columnId! }),
     enabled: !initialTask && !!columnId, 
   });
 

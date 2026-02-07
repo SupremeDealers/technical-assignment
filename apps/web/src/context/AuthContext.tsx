@@ -5,7 +5,7 @@ interface AuthContextType {
   user: User | null;
   saveUser: (user: User) => void;
   logoutUser: () => void;
-  isLoading: boolean; // Checks if we are done reading localStorage
+  isLoading: boolean; // Checks if done reading localStorage
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
-      } catch (e) {
+      } catch {
         localStorage.removeItem('user');
       }
     }
@@ -33,12 +33,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  //Logout (Clear everything)
+  //Logout
   const logoutUser = () => {
     setUser(null);
     localStorage.removeItem('user');
-    // Optional: Force reload to clear any in-memory states
-    // window.location.href = '/'; 
   };
 
   return (
