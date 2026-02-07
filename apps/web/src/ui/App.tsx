@@ -4,10 +4,11 @@ import AuthPage from '../pages/AuthPage';
 import { LoadingPage } from '../pages/LoadingPage';
 import { Header } from '../components/Header';
 import AdminPage from '../pages/AdminPage';
+import TaskPage from '../pages/TaskPage'
 
 // Placeholder Components (until we build them)
 const BoardDashboard = () => <div>Dashboard Content</div>;
-const TaskPage = () => <div>Task Page Content</div>;
+
 
 //Layout
 const MainLayout = () => {
@@ -60,7 +61,7 @@ export function App() {
           {/* Protected Routes*/}
           <Route element={<ProtectedRoute />}>
             <Route path="/board" element={<BoardDashboard />} />
-            <Route path="/tasks/:taskId" element={<TaskPage />} />
+            <Route path="/:boardId/:columnId/task/:taskId" element={<TaskPage />} />
           </Route>
 
           {/* Admin Routes */}
