@@ -4,6 +4,9 @@ import tsParser from "@typescript-eslint/parser";
 import globals from "globals";
 
 export default [
+  {
+    ignores: ["dist/**", "node_modules/**"],
+  },
   js.configs.recommended,
   {
     files: ["**/*.ts", "**/*.tsx"],
@@ -16,6 +19,9 @@ export default [
       },
       globals: {
         ...globals.browser,
+        ...globals.node,
+        RequestInit: "readonly",
+        RequestInfo: "readonly",
       },
     },
     plugins: {
@@ -23,6 +29,7 @@ export default [
     },
     rules: {
       "no-unused-vars": "off",
+      "no-undef": "off", // TypeScript handles this better
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
   },
