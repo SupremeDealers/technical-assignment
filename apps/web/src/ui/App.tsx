@@ -62,7 +62,7 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <Toaster position="top-right" richColors />
+          <Toaster position="bottom-left" richColors />
           <AppRoutes />
         </AuthProvider>
       </BrowserRouter>

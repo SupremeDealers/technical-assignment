@@ -130,7 +130,7 @@ export function BoardPage() {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-left"  richColors/>
       <div className="min-h-screen bg-background">
         <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container flex h-16 items-center justify-between px-4">
