@@ -13,7 +13,7 @@ describe("GET /health", () => {
 describe("Auth endpoints", () => {
   const testUser = {
     email: `test-${Date.now()}@example.com`,
-    password: "testpass123",
+    password: "TestPass123",
     name: "Test User",
   };
   let authToken: string;

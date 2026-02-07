@@ -46,6 +46,7 @@ router.post("/register", async (req, res) => {
       id: userId,
       email: data.email,
       name: data.name,
+      is_admin: false,
       created_at: now,
     };
 
@@ -111,6 +112,7 @@ router.post("/login", async (req, res) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      is_admin: Boolean(user.is_admin),
       created_at: user.created_at,
     };
 

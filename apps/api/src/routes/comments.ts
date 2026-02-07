@@ -5,7 +5,8 @@ import { createCommentSchema, updateCommentSchema } from "../schemas";
 import { sendError } from "../errors";
 import db from "../db";
 import { authenticate, checkTaskAccess, type AuthRequest } from "../middleware/auth";
-import type { Comment, CommentWithUser, UserPublic } from "../types";
+import type { Comment, CommentWithUser, UserPublic, Task } from "../types";
+import { logActivity, createNotification } from "./features";
 
 const router = Router();
 
@@ -34,7 +35,7 @@ router.get("/tasks/:taskId/comments", (req: AuthRequest, res: Response) => {
       .prepare(
         `
         SELECT c.*, 
-               u.id as user_id, u.email as user_email, u.name as user_name, u.created_at as user_created_at
+               u.id as user_id, u.email as user_email, u.name as user_name, u.is_admin as user_is_admin, u.created_at as user_created_at
         FROM comments c
         JOIN users u ON c.user_id = u.id
         WHERE c.task_id = ?
@@ -54,6 +55,7 @@ router.get("/tasks/:taskId/comments", (req: AuthRequest, res: Response) => {
         id: row.user_id as string,
         email: row.user_email as string,
         name: row.user_name as string,
+        is_admin: Boolean(row.user_is_admin),
         created_at: row.user_created_at as string,
       },
     }));
@@ -90,8 +92,41 @@ router.post("/tasks/:taskId/comments", (req: AuthRequest, res: Response) => {
     ).run(commentId, taskId, userId, data.content, now, now);
 
     const user = db
-      .prepare("SELECT id, email, name, created_at FROM users WHERE id = ?")
+      .prepare("SELECT id, email, name, is_admin, created_at FROM users WHERE id = ?")
       .get(userId) as UserPublic;
+
+    // Get task and board info for activity logging and notifications
+    const task = db.prepare(`
+      SELECT t.title, t.created_by, t.assignee_id, c.board_id 
+      FROM tasks t 
+      JOIN columns c ON t.column_id = c.id 
+      WHERE t.id = ?
+    `).get(taskId) as { title: string; created_by: string; assignee_id: string | null; board_id: string };
+
+    // Log activity
+    logActivity(task.board_id, userId, "commented", "task", task.title, taskId, data.content.substring(0, 100));
+
+    // Notify task creator if different from commenter
+    if (task.created_by !== userId) {
+      createNotification(
+        task.created_by,
+        "comment_added",
+        "New Comment",
+        `${user.name} commented on "${task.title}"`,
+        `/boards/${task.board_id}`
+      );
+    }
+
+    // Notify assignee if different from commenter and creator
+    if (task.assignee_id && task.assignee_id !== userId && task.assignee_id !== task.created_by) {
+      createNotification(
+        task.assignee_id,
+        "comment_added",
+        "New Comment",
+        `${user.name} commented on "${task.title}"`,
+        `/boards/${task.board_id}`
+      );
+    }
 
     const comment: CommentWithUser = {
       id: commentId,

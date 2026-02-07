@@ -4,7 +4,7 @@ import db from "./db";
 import { config } from "./config";
 
 async function seed() {
-  console.log("🌱 Seeding database...");
+  console.log("[Seed] Seeding database...");
 
   const now = new Date().toISOString();
 
@@ -29,7 +29,7 @@ async function seed() {
       `INSERT INTO users (id, email, password_hash, name, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?)`
     ).run(user.id, user.email, passwordHash, user.name, now, now);
-    console.log(`  ✓ Created user: ${user.email}`);
+    console.log(`  [+] Created user: ${user.email}`);
   }
 
   const boardId = uuidv4();
@@ -37,7 +37,7 @@ async function seed() {
     `INSERT INTO boards (id, name, description, owner_id, created_at, updated_at)
      VALUES (?, ?, ?, ?, ?, ?)`
   ).run(boardId, "Project Alpha", "Main project board for tracking features and bugs", users[0].id, now, now);
-  console.log(`  ✓ Created board: Project Alpha`);
+  console.log(`  [+] Created board: Project Alpha`);
 
   db.prepare("INSERT INTO board_members (board_id, user_id, role) VALUES (?, ?, ?)").run(
     boardId,
@@ -63,7 +63,7 @@ async function seed() {
       `INSERT INTO columns (id, board_id, name, position, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?)`
     ).run(col.id, boardId, col.name, col.position, now, now);
-    console.log(`  ✓ Created column: ${col.name}`);
+    console.log(`  [+] Created column: ${col.name}`);
   }
 
   const tasks = [
@@ -176,7 +176,7 @@ async function seed() {
       now
     );
   }
-  console.log(`  ✓ Created ${tasks.length} tasks`);
+  console.log(`  [+] Created ${tasks.length} tasks`);
 
   const comments = [
     {
@@ -223,10 +223,10 @@ async function seed() {
        VALUES (?, ?, ?, ?, ?, ?)`
     ).run(comment.id, comment.task_id, comment.user_id, comment.content, now, now);
   }
-  console.log(`  ✓ Created ${comments.length} comments`);
+  console.log(`  [+] Created ${comments.length} comments`);
 
-  console.log("\n✅ Seeding complete!");
-  console.log("\n📋 Demo credentials:");
+  console.log("\n[Success] Seeding complete!");
+  console.log("\n[Info] Demo credentials:");
   console.log("   Email: alice@example.com");
   console.log("   Password: password123");
   console.log("\n   (Also available: bob@example.com, charlie@example.com with same password)");

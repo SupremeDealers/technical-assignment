@@ -41,7 +41,7 @@ router.patch("/:columnId", (req: AuthRequest, res: Response) => {
 
     const now = new Date().toISOString();
     const updates: string[] = [];
-    const values: (string | number)[] = [];
+    const values: (string | number | null)[] = [];
 
     if (data.name !== undefined) {
       updates.push("name = ?");
@@ -50,6 +50,10 @@ router.patch("/:columnId", (req: AuthRequest, res: Response) => {
     if (data.position !== undefined) {
       updates.push("position = ?");
       values.push(data.position);
+    }
+    if (data.max_tasks !== undefined) {
+      updates.push("max_tasks = ?");
+      values.push(data.max_tasks);
     }
 
     if (updates.length > 0) {

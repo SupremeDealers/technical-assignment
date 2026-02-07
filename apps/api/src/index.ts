@@ -7,6 +7,7 @@ import boardsRoutes from "./routes/boards";
 import columnsRoutes from "./routes/columns";
 import tasksRoutes from "./routes/tasks";
 import commentsRoutes from "./routes/comments";
+import featuresRoutes from "./routes/features";
 
 import "./db";
 
@@ -24,6 +25,7 @@ app.use("/boards", boardsRoutes);
 app.use("/columns", columnsRoutes);
 app.use("/", tasksRoutes);
 app.use("/", commentsRoutes);
+app.use("/", featuresRoutes);
 
 app.use((req, res) => {
   sendError(res, 404, {

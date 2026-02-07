@@ -2,7 +2,7 @@
 
 A full-stack kanban-style board application with tasks and comments, built with React, Node.js, Express, and SQLite.
 
-## 🚀 Features
+## Features
 
 ### Backend (Node.js + Express)
 - **Authentication**: JWT-based auth with register/login
@@ -22,14 +22,14 @@ A full-stack kanban-style board application with tasks and comments, built with 
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js (see \`.nvmrc\` for version)
 - pnpm (recommended package manager)
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### 1. Install dependencies
 \`\`\`bash
@@ -59,7 +59,7 @@ Other demo users: \`bob@example.com\`, \`charlie@example.com\` (same password)
 
 ---
 
-## 📜 Available Scripts
+## Available Scripts
 
 | Command | Description |
 |---------|-------------|
@@ -72,7 +72,7 @@ Other demo users: \`bob@example.com\`, \`charlie@example.com\` (same password)
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 \`\`\`
 ├── apps/
@@ -105,7 +105,7 @@ Other demo users: \`bob@example.com\`, \`charlie@example.com\` (same password)
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Authentication
 | Method | Endpoint | Description |
@@ -168,61 +168,61 @@ Other demo users: \`bob@example.com\`, \`charlie@example.com\` (same password)
 
 ---
 
-## 🎨 Architecture Decisions & Tradeoffs
+## Architecture Decisions & Tradeoffs
 
 ### 1. SQLite for Database
 **Decision**: Used SQLite with better-sqlite3 for local persistence.
 
 **Tradeoffs**:
-- ✅ Zero configuration, file-based storage
-- ✅ Fast for development and testing
-- ✅ Synchronous API (simpler code)
-- ❌ Not suitable for production at scale
-- ❌ No concurrent write support
+- [+] Zero configuration, file-based storage
+- [+] Fast for development and testing
+- [+] Synchronous API (simpler code)
+- [-] Not suitable for production at scale
+- [-] No concurrent write support
 
 ### 2. JWT Authentication
 **Decision**: Stateless JWT tokens stored in localStorage.
 
 **Tradeoffs**:
-- ✅ Simple to implement
-- ✅ Works well with REST APIs
-- ✅ No server-side session storage needed
-- ❌ Cannot invalidate tokens (except expiry)
-- ❌ localStorage is vulnerable to XSS
+- [+] Simple to implement
+- [+] Works well with REST APIs
+- [+] No server-side session storage needed
+- [-] Cannot invalidate tokens (except expiry)
+- [-] localStorage is vulnerable to XSS
 
 ### 3. @dnd-kit for Drag & Drop
 **Decision**: Used @dnd-kit instead of react-beautiful-dnd.
 
 **Tradeoffs**:
-- ✅ Modern, actively maintained
-- ✅ Better TypeScript support
-- ✅ Smaller bundle size
-- ✅ More flexible API
-- ❌ Slightly more setup required
+- [+] Modern, actively maintained
+- [+] Better TypeScript support
+- [+] Smaller bundle size
+- [+] More flexible API
+- [-] Slightly more setup required
 
 ### 4. TanStack Query for Server State
 **Decision**: Used TanStack Query for all API calls.
 
 **Tradeoffs**:
-- ✅ Automatic caching and refetching
-- ✅ Optimistic updates support
-- ✅ Loading/error states built-in
-- ✅ Reduces boilerplate significantly
-- ❌ Learning curve for mutations
+- [+] Automatic caching and refetching
+- [+] Optimistic updates support
+- [+] Loading/error states built-in
+- [+] Reduces boilerplate significantly
+- [-] Learning curve for mutations
 
 ### 5. CSS without Framework
 **Decision**: Custom CSS with CSS variables.
 
 **Tradeoffs**:
-- ✅ Full control over styling
-- ✅ No external dependencies
-- ✅ Better understanding of styles
-- ❌ More code to write
-- ❌ No pre-built components
+- [+] Full control over styling
+- [+] No external dependencies
+- [+] Better understanding of styles
+- [-] More code to write
+- [-] No pre-built components
 
 ---
 
-## 🧪 Testing
+## Testing
 
 The project includes:
 - **API Tests**: Health checks, auth flow, protected routes
@@ -235,7 +235,7 @@ pnpm test
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 If I had more time, I would add:
 
@@ -252,7 +252,7 @@ If I had more time, I would add:
 
 ---
 
-## 📝 Known Limitations
+## Known Limitations
 
 1. No email verification on registration
 2. Passwords are hashed but no password reset flow
@@ -263,7 +263,7 @@ If I had more time, I would add:
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [TanStack Query](https://tanstack.com/query) - Server state management
 - [@dnd-kit](https://dndkit.com/) - Drag and drop
@@ -272,6 +272,6 @@ If I had more time, I would add:
 
 ---
 
-## 📄 License
+## License
 
 This project is for demonstration purposes as part of a technical assessment.

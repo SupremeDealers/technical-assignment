@@ -1,0 +1,179 @@
+.templates-container {
+  min-width: 400px;
+  max-width: 600px;
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.template-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.template-card:hover {
+  border-color: var(--color-primary);
+  background: var(--color-surface-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.template-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.template-card-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}
+
+.template-card-title {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-family: monospace;
+  background: var(--color-background);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.template-card-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.template-delete-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-danger);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.template-card:hover .template-delete-btn {
+  opacity: 1;
+}
+
+.templates-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Template Form */
+.template-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.template-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Template Preview */
+.template-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.template-preview-name {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.template-preview-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.template-preview-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.template-preview-row {
+  display: flex;
+  gap: 2rem;
+}
+
+.template-preview-description {
+  background: var(--color-surface);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  white-space: pre-wrap;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.template-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.template-checklist {
+  margin: 0;
+  padding-left: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.template-checklist li {
+  margin-bottom: 0.25rem;
+}
+
+.template-preview-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Badge sizes */
+.badge-sm {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+}

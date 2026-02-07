@@ -99,3 +99,13 @@
     width: 100%;
   }
 }
+
+/* Side Panel */
+.board-side-panel {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+}
