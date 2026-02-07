@@ -16,7 +16,7 @@ router.get("/boards", requireAuth, async (req: AuthRequest, res) => {
     },
   });
 
-  res.json({ data: boards });
+  res.json(boards);
 });
 
 export default router;

@@ -44,7 +44,7 @@ router.get(
     ]);
 
     return res.json({
-      data: tasks,
+      tasks,
       meta: {
         page,
         limit,
@@ -94,7 +94,7 @@ router.post(
       include: { column: true },
     });
 
-    return res.status(201).json({ data: task });
+    return res.status(201).json(task);
   },
 );
 
@@ -126,7 +126,7 @@ router.patch("/tasks/:taskId", requireAuth, async (req: AuthRequest, res) => {
     data: parsed.data,
   });
 
-  return res.json({ data: task });
+  return res.json(task);
 });
 
 router.patch(
@@ -165,7 +165,7 @@ router.patch(
       include: { column: true },
     });
 
-    return res.json({ data: task });
+    return res.json(task);
   },
 );
 

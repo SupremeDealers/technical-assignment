@@ -108,7 +108,7 @@ router.get("/me", requireAuth, async (req: AuthRequest, res) => {
     select: { id: true, email: true, name: true },
   });
 
-  res.json({ data: user });
+  res.json(user);
 });
 
 export default router;

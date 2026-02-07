@@ -6,40 +6,44 @@ import { createCommentSchema } from "../schemas/comments.schema";
 
 const router = Router();
 
-router.get("/tasks/:taskId/comments", requireAuth, async (req:Request, res:Response) => {
-  const { taskId } = req.params;
+router.get(
+  "/tasks/:taskId/comments",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const { taskId } = req.params;
 
-  const page = Math.max(1, Number(req.query.page || 1));
-  const limit = Math.min(50, Number(req.query.limit || 20));
+    const page = Math.max(1, Number(req.query.page || 1));
+    const limit = Math.min(50, Number(req.query.limit || 20));
 
-  const skip = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
-  const where = { taskId };
+    const where = { taskId };
 
-  const [items, total] = await Promise.all([
-    prisma.comment.findMany({
-      where,
-      skip,
-      take: limit,
-      orderBy: { createdAt: "desc" },
-      include: {
-        author: { select: { id: true, name: true } },
+    const [items, total] = await Promise.all([
+      prisma.comment.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: { select: { id: true, name: true } },
+        },
+      }),
+
+      prisma.comment.count({ where }),
+    ]);
+
+    res.json({
+      data: items,
+      meta: {
+        page,
+        limit,
+        total,
+        hasNext: page * limit < total,
       },
-    }),
-
-    prisma.comment.count({ where }),
-  ]);
-
-  res.json({
-    data: items,
-    meta: {
-      page,
-      limit,
-      total,
-      hasNext: page * limit < total,
-    },
-  });
-});
+    });
+  },
+);
 
 router.post(
   "/tasks/:taskId/comments",
@@ -78,7 +82,7 @@ router.post(
       },
     });
 
-    res.status(201).json({ data: comment });
+    res.status(201).json(comment);
   },
 );
 

@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth";
 import boardRoutes from "./routes/boards";
 import taskRoutes from "./routes/task";
 import commentsRoutes from "./routes/comments";
+import columnsRoutes from "./routes/columns";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", boardRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", commentsRoutes);
+app.use("/api", columnsRoutes);
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
