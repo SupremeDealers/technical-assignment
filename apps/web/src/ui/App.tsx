@@ -43,32 +43,38 @@ const AdminRoute = () => {
 };
 
 //Routing
+//Exported component (For Tests)
+export function AppRoutes() {
+  return (
+    <AuthProvider>
+      <Routes>
+        {/* Public Routes */}
+        <Route element={<PublicRoute />}>
+          <Route path="/" element={<AuthPage />} />
+        </Route>
+
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/board" element={<BoardDashboard />} />
+          <Route path="/:boardId/:columnId/task/:taskId" element={<TaskPage />} />
+        </Route>
+
+        {/* Admin Routes */}
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<AdminPage />} />
+        </Route>
+        
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </AuthProvider>
+  );
+}
+
+//main entry point (For Production)
 export function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          
-          {/* Public Routes */}
-          <Route element={<PublicRoute />}>
-            <Route path="/" element={<AuthPage />} />
-          </Route>
-
-          {/* Protected Routes*/}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/board" element={<BoardDashboard />} />
-            <Route path="/:boardId/:columnId/task/:taskId" element={<TaskPage />} />
-          </Route>
-
-          {/* Admin Routes */}
-          <Route element={<AdminRoute />}>
-            <Route path="/admin" element={<AdminPage />} />
-          </Route>
-          
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </AuthProvider>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

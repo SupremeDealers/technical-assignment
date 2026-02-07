@@ -7,14 +7,12 @@ import adminRoutes from './routes/adminRoutes';
 import boardRoutes from './routes/boardRoutes';
 import columnTaskRoutes from './routes/columnTaskRoutes';
 import taskRoutes from './routes/taskRoutes';
-
-
-import "dotenv/config"
 import cookieParser from 'cookie-parser';
+import "dotenv/config"
 
 
 
-const app = express();
+export const app = express();
 const port = Number(process.env.PORT);
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
@@ -60,8 +58,11 @@ app.use((req, res, next) => {
 // --- Global Error Handler (Must be last) ---
 app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`[api] listening on http://localhost:${port}`);
-});
-
-export default app;
+// app.listen(port, () => {
+//   console.log(`[api] listening on http://localhost:${port}`);
+// });
+if (require.main === module) { // Only start server if this file is run directly (not imported by tests)
+  app.listen(port, () => {
+    console.log(`[api] listening on http://localhost:${port}`);
+  });
+}
