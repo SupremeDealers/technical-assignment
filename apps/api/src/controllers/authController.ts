@@ -57,7 +57,8 @@ export const register = catchAsync(async (req: Request, res: Response) => {
   maxAge: 24 * 60 * 60 * 1000, 
   })
   .status(201)
-  .json({ user: newUser, token });
+  .json({ user: newUser
+  });
 });
 
 export const login = catchAsync(async (req: Request, res: Response) => {
@@ -99,6 +100,5 @@ export const login = catchAsync(async (req: Request, res: Response) => {
       role: user.role,
       createdAt: user.createdAt,
     },
-    token,
   });
 });
