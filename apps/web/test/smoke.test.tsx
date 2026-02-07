@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import { App } from "../src/ui/App";
 
 describe("App", () => {
-  it("renders title", () => {
+  it("renders login page by default", () => {
     render(<App />);
-    expect(screen.getByText(/Team Boards/i)).toBeInTheDocument();
+    expect(screen.getByText(/login/i)).toBeInTheDocument();
   });
 });

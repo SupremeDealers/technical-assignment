@@ -172,3 +172,99 @@ Comments:
 - Comments view/add works
 - CI is green; tests are meaningful
 - README explains tradeoffs + known limitations
+
+
+
+---
+
+## Implementation Decisions & Tradeoffs
+
+### Key Decisions
+
+**1. Client-Side Filtering for Search/Priority**
+- **Decision**: Fetch all tasks once and filter on the client using `useMemo`
+- **Tradeoff**: Better UX (instant filtering, no API calls on each keystroke) but doesn't scale beyond ~1000 tasks
+- **Why**: For a kanban board, most teams have <100 active tasks. Eliminated network latency and prevented task duplication bugs when filtering across multiple columns
+- **Alternative**: Server-side filtering with debounced search would scale better but adds complexity and latency
+
+**2. shadcn/ui with Tailwind CSS v4**
+- **Decision**: Used shadcn/ui component library with Tailwind v4
+- **Tradeoff**: Modern, accessible components but requires manual component installation and larger bundle
+- **Why**: Provides production-ready accessible components (ARIA, keyboard navigation) without reinventing the wheel. Tailwind v4 offers better performance with PostCSS plugin
+- **Alternative**: Plain CSS or styled-components would reduce dependencies but require more accessibility work
+
+**3. React Hook Form + Zod Validation**
+- **Decision**: Unified form handling with React Hook Form and Zod schemas
+- **Tradeoff**: Additional dependencies but robust validation and better UX
+- **Why**: Reduces re-renders, provides instant client-side validation, matches backend Zod schemas for consistency
+- **Alternative**: Controlled forms with useState would be simpler but more verbose and harder to validate
+
+**4. @dnd-kit for Drag-and-Drop**
+- **Decision**: Used @dnd-kit instead of react-beautiful-dnd
+- **Tradeoff**: Modern API with better accessibility but less mature ecosystem
+- **Why**: react-beautiful-dnd is no longer maintained. @dnd-kit has built-in keyboard navigation and screen reader support
+- **Alternative**: HTML5 drag-and-drop API would remove dependency but poor accessibility
+
+**5. SQLite for Persistence**
+- **Decision**: SQLite with Drizzle ORM
+- **Tradeoff**: Simple setup, file-based, but single-writer limitation
+- **Why**: Zero configuration, type-safe queries, perfect for demo/MVP. Drizzle provides excellent TypeScript DX
+- **Alternative**: PostgreSQL would handle concurrency better but requires separate server setup
+
+### Known Limitations
+
+**Performance**
+- Client-side filtering breaks down with >1000 tasks (needs server-side pagination)
+- All tasks loaded on mount (could implement virtual scrolling for large lists)
+- No query debouncing on search (works fine with current data size)
+
+**Features Not Implemented**
+- Real-time updates (no WebSockets—requires manual refresh to see other users' changes)
+- Task assignments (can only see task creator, not assignees)
+- Due dates and reminders
+- File attachments on tasks
+- Bulk operations (multi-select, batch delete/move)
+- Column reordering via drag-and-drop (can edit position manually)
+- Activity log/audit trail
+
+**Scalability**
+- SQLite is single-writer (would need PostgreSQL for high concurrency)
+- No caching layer (Redis) for sessions or frequently accessed data
+- JWT stored in localStorage (vulnerable to XSS; httpOnly cookies would be more secure)
+- No rate limiting on API endpoints
+
+**Testing**
+- Limited test coverage (smoke tests only)
+- No E2E tests (Playwright/Cypress would catch integration issues)
+- No API integration tests with real database
+
+**DevOps**
+- No Docker setup (manual Node/pnpm installation required)
+- No production build optimizations (code splitting, CDN, etc.)
+- Environment variables not documented (needs .env.example)
+
+### Future Improvements (Priority Order)
+
+1. **Server-side pagination**: Add `?page=&limit=` to tasks endpoint, implement infinite scroll
+2. **Real-time updates**: WebSocket for live collaboration
+3. **Security hardening**: httpOnly cookies, rate limiting, input sanitization
+4. **Test coverage**: Add integration tests, E2E tests, aim for >80% coverage
+5. **Performance**: Implement virtual scrolling, query debouncing, React.memo optimizations
+6. **Docker**: Add Dockerfile and docker-compose for easy deployment
+
+---
+
+## Demo Video
+
+**Watch the 5-minute demo**: [Team Boards Demo Video](https://drive.google.com/file/d/1YGyFRrgwp36yY1E7R-YnCF6D5IJZTwXw/view?usp=sharing)
+
+The demo showcases:
+- Authentication flow (register/login)
+- Task creation and management
+- Drag-and-drop functionality
+- Comments system
+- Search and filtering
+- Tests running
+- Key architectural decisions
+
+---
