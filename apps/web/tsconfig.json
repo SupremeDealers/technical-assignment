@@ -17,7 +17,8 @@
     ]
   },
   "include": [
+    "vite-env.d.ts",
     "src",
-    "test"
+    "test",
   ]
 }
