@@ -37,6 +37,7 @@ jobs:
       - name: Setup Database & Seed
         run: |
           cd apps/api
+          rm -f sqlite.db  # <--- FORCE DELETE OLD DB
           pnpm db:push
           pnpm seed
 
