@@ -48,7 +48,7 @@ async function main() {
 
   //Create Tasks
   console.log('Generating Tasks...');
-  
+
   const tasksToInsert: any[] = [];
 
   //Generate 22 "To Do" tasks (To test Pagination - limit is usually 20)
@@ -61,19 +61,25 @@ async function main() {
     });
   }
 
-  //generate 3 "In Progress" tasks
-  tasksToInsert.push(
-    { columnId: colProgress.id, title: 'Fix Auth Bug', priority: 'high', description: 'Login fails on Safari' },
-    { columnId: colProgress.id, title: 'Refactor API', priority: 'medium', description: 'Move routes to separate files' },
-    { columnId: colProgress.id, title: 'Write Tests', priority: 'low', description: 'Add unit tests for helpers' }
-  );
+  // Generate "In Progress" tasks
+  for (let i = 1; i <= 8; i++) {
+    tasksToInsert.push({
+      columnId: colProgress.id,
+      title: `In Progress Task ${i}`,
+      description: `Work in progress task #${i}`,
+      priority: i % 3 === 0 ? 'high' : i % 2 === 0 ? 'medium' : 'low',
+    });
+  }
 
-  //Generate 3 "Done" tasks
-  tasksToInsert.push(
-    { columnId: colDone.id, title: 'Setup Repo', priority: 'high' },
-    { columnId: colDone.id, title: 'Configure Drizzle', priority: 'high' },
-    { columnId: colDone.id, title: 'Initial Commit', priority: 'low' }
-  );
+  // Generate "Done" tasks
+  for (let i = 1; i <= 8; i++) {
+    tasksToInsert.push({
+      columnId: colDone.id,
+      title: `Done Task ${i}`,
+      description: `Completed task #${i}`,
+      priority: i % 3 === 0 ? 'high' : i % 2 === 0 ? 'medium' : 'low',
+    });
+  }
 
   const createdTasks = await db.insert(tasks).values(tasksToInsert).returning();
   console.log(`Created ${createdTasks.length} Tasks`);

@@ -60,7 +60,7 @@ export const BoardColumn = ({ column, boardId, search }: ColumnProps) => {
       </div>
 
       {/* Task List Area */}
-      <div className="p-3 space-y-3 min-h-25 flex-1">
+      <div className="p-4 space-y-3 flex-1">
         {isLoading ? (
           <div className="flex justify-center py-10"><Loader2 className="animate-spin h-6 w-6 text-gray-300"/></div>
         ) : tasks.length === 0 ? (
