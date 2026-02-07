@@ -8,8 +8,10 @@ import boardRoutes from './routes/boardRoutes';
 import columnTaskRoutes from './routes/columnTaskRoutes';
 import taskRoutes from './routes/taskRoutes';
 import cookieParser from 'cookie-parser';
+import { fileURLToPath } from 'url';
 import "dotenv/config"
 
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);// hhelper to check if file is run directly in ESM
 
 
 export const app = express();
@@ -61,7 +63,7 @@ app.use(errorHandler);
 // app.listen(port, () => {
 //   console.log(`[api] listening on http://localhost:${port}`);
 // });
-if (require.main === module) { // Only start server if this file is run directly (not imported by tests)
+if (isMainModule) { // Only start server if this file is run directly (not imported by tests)
   app.listen(port, () => {
     console.log(`[api] listening on http://localhost:${port}`);
   });
