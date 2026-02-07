@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --primary: hsla(0, 0%, 4%, 1);
+  --secondary: hsla(210, 20%, 5%, 1);
+  --common: hsla(123, 57%, 66%, 1);
+  --donate: hsla(60, 30%, 56%, 1);
+
+  --text-primary: hsla(0, 0%, 90%, 1);
+  --text-secondary: hsla(0, 0%, 48%, 1);
+}
+
+@theme {
+  --font-sans: var(--font-dm-sans);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-common: var(--common);
+  --color-donate: var(--donate);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+}
+
+body button {
+  cursor: pointer;
+}
+
+body h1,
+h2,
+p {
+  cursor: default;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.174);
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
