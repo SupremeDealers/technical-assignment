@@ -9,7 +9,7 @@ import { sendError } from "../errors";
 const router = Router();
 
 router.post(
-  "/register",
+  "/signup",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = registerSchema.parse(req.body);
@@ -66,18 +66,18 @@ router.post("/login", async (req, res, next) => {
     });
 
     if (!user) {
-      return sendError(res, 401, {
-        code: "FORBIDDEN",
-        message: `Invalid email or password: ${req.method} ${req.path}`,
+      return sendError(res, 400, {
+        code: "BAD_REQUEST",
+        message: `Invalid email or password`,
       });
     }
 
     const isValidPass = await bcrypt.compare(data.password, user.password);
 
     if (!isValidPass) {
-      return sendError(res, 401, {
-        code: "FORBIDDEN",
-        message: `Invalid email or password: ${req.method} ${req.path}`,
+      return sendError(res, 400, {
+        code: "BAD_REQUEST",
+        message: `Invalid email or password`,
       });
     }
 
