@@ -4,8 +4,8 @@ import api from './axios';
 export const getTasksApi = async ({columnId,...query}: { columnId: string; search?: string; sort?: string; page?: number }) => 
   (await api.get(`/columns/${columnId}/tasks`, { params:query })).data;
 
-export const createTaskApi = async (data: { columnId: string; title: string; priority: string }) => 
-  (await api.post(`/columns/${data.columnId}/tasks`, data)).data;
+export const createTaskApi = async ({columnId, ...data}: { columnId: string; title: string; priority: string }) => 
+  (await api.post(`/columns/${columnId}/tasks`, data)).data;
 
 export const updateTaskApi = async ({id,...data}: { id: string; title?: string; description?: string; priority?: string; columnId?: string }) => 
   (await api.patch(`/tasks/${id}`, data)).data;

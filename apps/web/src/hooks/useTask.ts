@@ -10,6 +10,13 @@ export const useComments = (taskId: string) => {
     enabled: !!taskId,
   });
 };
+export const useTasksQuery = (params: { columnId: string; search: string; page: number; limit: number }) => {
+  return useQuery({
+    queryKey: ['tasks', params.columnId, params.page, params.search],
+    queryFn: () => api.getTasksApi(params),
+    placeholderData: (previousData) => previousData,
+  });
+};
 
 //mutation
 export const useCreateTask = () => {

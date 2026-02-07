@@ -5,11 +5,7 @@ import { LoadingPage } from '../pages/LoadingPage';
 import { Header } from '../components/Header';
 import AdminPage from '../pages/AdminPage';
 import TaskPage from '../pages/TaskPage'
-
-// Placeholder Components (until we build them)
-const BoardDashboard = () => <div>Dashboard Content</div>;
-
-
+import BoardDashboard from "../pages/BoardDashboard"
 //Layout
 const MainLayout = () => {
   return (
