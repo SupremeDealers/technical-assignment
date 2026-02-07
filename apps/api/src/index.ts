@@ -1,30 +1,56 @@
-import express from "express";
-import cors from "cors";
-import { sendError } from "./errors";
+import { createApp } from "./app";
+import { connectDB, disconnectDB } from "./config/db";
+import { env } from "./config/env";
+import http from "http";
 
-const app = express();
+async function start() {
+  try {
+//! Connect to Database
+    await connectDB();
 
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+ //! Create Express App
+    const app = createApp();
+    const PORT = Number(env.PORT) || 4000;
 
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, ts: new Date().toISOString() });
-});
+    const server = http.createServer(app);
 
-/**
- * Example: how we want errors shaped.
- * Candidates should re-use this for their implementation.
- */
-app.use((req, res) => {
-  sendError(res, 404, {
-    code: "NOT_FOUND",
-    message: `Route not found: ${req.method} ${req.path}`,
-  });
-});
+//! Start Server
+    server.listen(PORT, () => {
+      console.log(`[SERVER] Server running on http://localhost:${PORT}`);
+      console.log(`[ENV] Environment: ${env.NODE_ENV}`);
+    });
 
-const port = Number(process.env.PORT ?? 4000);
-app.listen(port, () => {
-  console.log(`[api] listening on http://localhost:${port}`);
-});
+//! Graceful Shutdown
+    const shutdown = async (signal: string) => {
+      console.log(`\n[SERVER] Received ${signal}. Shutting down...`);
 
-export default app;
+      server.close(async () => {
+        await disconnectDB();
+        console.log("[SERVER] DB disconnected");
+        console.log("[SERVER]   Server stopped");
+        process.exit(0);
+      });
+    };
+
+    process.on("SIGINT", shutdown);
+    process.on("SIGTERM", shutdown);
+
+//* Handle Unhandled Rejections and Exceptions
+    process.on("unhandledRejection", (reason) => {
+      console.error("Unhandled Rejection:", reason);
+    });
+
+    process.on("uncaughtException", (error) => {
+      console.error("Uncaught Exception:", error);
+      process.exit(1);
+    });
+  } catch (error) {
+    console.error("[SERVER]Failed to start server");
+    if (env.NODE_ENV !== "production") {
+      console.error(error);
+    }
+    process.exit(1);
+  }
+}
+
+start();
