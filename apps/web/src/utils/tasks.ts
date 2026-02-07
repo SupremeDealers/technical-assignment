@@ -1,11 +1,12 @@
+import { Tasks } from "../types/types";
 import { apiClient } from "./api-client";
 
 export async function getTasks(boardId: string, q?: string) {
   try {
-    const res = await apiClient.get(`/boards/${boardId}/tasks`, {
+    const res = await apiClient.get<Tasks>(`/boards/${boardId}/tasks`, {
       params: { q },
     });
-    return res.data.data;
+    return res.data;
   } catch (err) {
     console.error(err);
     throw err;

@@ -11,10 +11,10 @@ export async function signup(data: {
   password: string;
 }) {
   const res = await apiClient.post("/auth/register", data);
-  return res.data.data;
+  return res.data;
 }
 
 export async function me() {
   const res = await apiClient.get("/auth/me");
-  return res.data.data;
+  return res.data;
 }

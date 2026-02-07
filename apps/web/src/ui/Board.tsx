@@ -5,7 +5,8 @@ import { useAuth } from "../hooks/useAuth";
 import { getTasks, moveTask } from "../utils/tasks";
 import { useState } from "react";
 import CreateTask from "../components/CreateTask";
-import { Columns } from "../types/types";
+import { Column } from "../types/types";
+import { getColumns } from "../utils/columns";
 export default function Board() {
   const nav = useNavigate();
   const qc = useQueryClient();
@@ -17,7 +18,12 @@ export default function Board() {
     queryFn: getBoards,
   });
 
-  const { data, isLoading, isError } = useAuth();
+  const { data: columns, isLoading: columnsLoading } = useQuery({
+    queryKey: ["columns"],
+    queryFn: getColumns,
+  });
+
+  const { data: profile, isLoading, isError } = useAuth();
 
   if (!localStorage.getItem("token")) {
     nav("/login");
@@ -26,9 +32,9 @@ export default function Board() {
 
   const boardId = boardsData?.[0]?.id;
 
-  const { data: tasks, isLoading: tasksLoading } = useQuery({
+  const { data, isLoading: tasksLoading } = useQuery({
     queryKey: ["tasks", boardId],
-    queryFn: () => getTasks(boardId),
+    queryFn: () => getTasks(boardId || ""),
     enabled: !!boardId,
   });
 
@@ -37,16 +43,14 @@ export default function Board() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks", boardId] }),
   });
 
-  if (isLoading || boardLoading || tasksLoading)
+  if (isLoading || boardLoading || columnsLoading || tasksLoading)
     return <p>Loading boards...</p>;
 
   if (!boardId) return <p>No boards yet</p>;
 
-  const columns: Columns[] = Array.from(
-    new Map(tasks.map((t: any) => [t.column.id, t.column])).values(),
-  ) as Columns[];
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-2xl text-center font-semibold">Welcome {profile.name}</h1>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold mb-6">{boardsData[0].name}</h1>
         <button
@@ -65,8 +69,8 @@ export default function Board() {
             <h2 className="font-semibold mb-4 text-gray-700">{col.name}</h2>
 
             <div className="space-y-3">
-              {tasks
-                .filter((t: any) => t.columnId === col.id)
+              {data?.tasks
+                ?.filter((t: any) => t.columnId === col.id)
                 .map((task: any) => (
                   <div
                     key={task.id}
@@ -100,9 +104,8 @@ export default function Board() {
                   </div>
                 ))}
 
-              {tasks.filter((t: any) => t.columnId === col.id).length === 0 && (
-                <p className="text-xs text-gray-400">No tasks</p>
-              )}
+              {data?.tasks?.filter((t: any) => t.columnId === col.id).length ===
+                0 && <p className="text-xs text-gray-400">No tasks</p>}
             </div>
           </div>
         ))}

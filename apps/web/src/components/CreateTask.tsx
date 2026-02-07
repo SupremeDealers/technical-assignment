@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ModalWrapper from "./ModalWrapper";
 import { createTask } from "../utils/tasks";
-import { Columns } from "../types/types";
+import { Column } from "../types/types";
 
 function getApiErrorMessage(err: any) {
   return err?.response?.data?.error?.message || "Failed to create task";
@@ -17,7 +17,7 @@ export default function CreateTask({
   open: boolean;
   onClose: () => void;
   boardId: string;
-  columns: Columns[];
+  columns: Column[];
 }) {
   const qc = useQueryClient();
 
