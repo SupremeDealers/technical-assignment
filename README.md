@@ -5,6 +5,7 @@ A small kanban-style board with tasks and comments, backed by a Node (Express) A
 ---
 
 ## Features
+
 - Auth: register/login with JWT (Bearer token)
 - Board UI: columns + task cards
 - Tasks: create, edit, delete, move across columns; drag & drop reorder when sorted by Order
@@ -14,22 +15,28 @@ A small kanban-style board with tasks and comments, backed by a Node (Express) A
 - Consistent API error shape
 
 ### Demo video
-A 3–5 minute recording showing login/register, create/move task, add comment, tests (`pnpm test`), plus one decision + tradeoff.
+
+Demo video link: https://www.loom.com/share/b06e32dbd5f74c3297e53bf694a7c751
+
+A 5 minute recording showing login/register, create/move task, add comment, tests (`pnpm test`), decisions + tradeoffs.
 
 ---
 
 ## Getting Started
 
 ### Prereqs
+
 - Node (see `.nvmrc`)
 - pnpm
 
 ### Install
+
 ```bash
 pnpm install
 ```
 
 ### Run (API + Web)
+
 ```bash
 pnpm dev
 ```
@@ -38,15 +45,18 @@ pnpm dev
 - Web: http://localhost:5173
 
 ### Seed demo data (optional)
+
 ```bash
 pnpm --filter @takehome/api seed
 ```
 
 Demo user (from `apps/api/.env.development`):
+
 - email: `demo@example.com`
 - password: `Pwd@1234`
 
 ### Tests / Lint / Build
+
 ```bash
 pnpm test
 pnpm lint
@@ -57,15 +67,20 @@ pnpm build
 ---
 
 ## Architecture
+
 - `apps/api`: Express + TypeScript, SQLite (`better-sqlite3`), Zod validation, JWT auth
 - `apps/web`: React + TypeScript (Vite), TanStack Query, React Router, Tailwind, dnd-kit
 - DB file: `takehome.db` at repo root (delete it to reset, or re-run seed)
 
 ---
 
-## One Decision + Tradeoff
-- Decision: store the JWT in `localStorage` and send it as a Bearer token.
-- Tradeoff: simplest end-to-end flow for a take-home, but less secure than httpOnly cookies (XSS risk); for production I’d switch to cookies + CSRF protection.
+## Technical Decision & Tradeoff
+
+- Decision: I chose to use a simple way to manage state on the client side instead of adding a large state management library.
+- Benefit: The main benefit of this decision is that it was faster to set up and easier to understand. I was able to focus on building features without writing a lot of extra boilerplate code.
+- Tradeoff: The tradeoff is that this approach may become harder to manage as the application grows and becomes more complex.
+- Why this was acceptable: I accepted this tradeoff because the scope of the project is small and I had limited time to complete the assignment.
+- Future improvement: If I had more time, I would refactor the client state into a more structured and scalable state management solution.
 
 ---
 
@@ -74,9 +89,11 @@ pnpm build
 Base URL: `http://localhost:4000`
 
 All routes (except `/health` and `/auth/*`) require:
+
 - `Authorization: Bearer <token>`
 
 Error shape:
+
 ```json
 {
   "error": {
@@ -92,10 +109,12 @@ Error shape:
 ### Endpoints
 
 Auth:
+
 - POST `/auth/register`
 - POST `/auth/login`
 
 Boards / Columns:
+
 - GET `/boards/me`
 - GET `/boards/:boardId`
 - GET `/boards/:boardId/columns`
@@ -104,6 +123,7 @@ Boards / Columns:
 - DELETE `/columns/:columnId`
 
 Tasks:
+
 - GET `/columns/:columnId/tasks?search=&page=&limit=&sort=order|createdAt|priority`
 - POST `/columns/:columnId/tasks`
 - GET `/tasks/:taskId`
@@ -111,12 +131,14 @@ Tasks:
 - DELETE `/tasks/:taskId`
 
 Comments:
+
 - GET `/tasks/:taskId/comments`
 - POST `/tasks/:taskId/comments`
 
 ---
 
 ## Quick Checks
+
 - `pnpm install && pnpm dev`
 - Register/login → board loads
 - Create/edit/delete task; move task across columns; reorder via drag & drop (when sorted by Order)
