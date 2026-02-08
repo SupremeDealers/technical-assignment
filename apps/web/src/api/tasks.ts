@@ -1,23 +1,5 @@
 import { apiFetch } from "./client";
-
-export interface Task {
-  id: string;
-  title: string;
-  columnId: string;
-  _count?: {
-    comments: number;
-  };
-}
-
-export interface TasksResponse {
-  tasks: Task[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
+import { TasksResponse, Task } from "./apiTypes";
 
 export async function getColumnTasks(
   columnId: string,

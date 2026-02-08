@@ -3,14 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getColumnTasks, createTask } from "../api/tasks";
 import { TaskCard } from "./TaskCard";
 import { TaskModal } from "./TaskModal";
+import { ColumnProps } from "./uiTypes";
 
-interface ColumnProps {
-  column: {
-    id: string;
-    title: string;
-  };
-  search: string;
-}
+
 
 export function Column({ column, search }: ColumnProps) {
   const queryClient = useQueryClient();

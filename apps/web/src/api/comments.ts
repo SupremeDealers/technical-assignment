@@ -1,13 +1,5 @@
 import { apiFetch } from "./client";
-
-export interface Comment {
-  id: string;
-  content: string;
-  createdAt: string;
-  user: {
-    email: string;
-  };
-}
+import { Comment } from "./apiTypes";
 
 export async function getTaskComments(taskId: string): Promise<Comment[]> {
   return apiFetch<Comment[]>(`/tasks/${taskId}/comments`);

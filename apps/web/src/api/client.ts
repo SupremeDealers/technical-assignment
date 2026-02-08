@@ -19,7 +19,6 @@ export async function apiFetch<T>(
   if (!response.ok) {
     if (response.status === 401) {
       localStorage.removeItem("token");
-      // Optional: redirect to login
     }
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.error?.message || "Something went wrong");

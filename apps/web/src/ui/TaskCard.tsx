@@ -1,15 +1,7 @@
 import React from "react";
+import { TaskCardProps } from "./uiTypes";
 
-interface TaskCardProps {
-  task: {
-    id: string;
-    title: string;
-    _count?: {
-      comments: number;
-    };
-  };
-  onClick: () => void;
-}
+
 
 export function TaskCard({ task, onClick }: TaskCardProps) {
   return (

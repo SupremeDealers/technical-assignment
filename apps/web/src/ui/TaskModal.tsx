@@ -4,15 +4,8 @@ import { getTaskComments, addTaskComment } from "../api/comments";
 import { updateTask, deleteTask } from "../api/tasks";
 import { getBoards, getBoardColumns } from "../api/boards";
 import { useAuth } from "../hooks/useAuth";
+import { TaskModalProps } from "./uiTypes";
 
-interface TaskModalProps {
-  task: {
-    id: string;
-    title: string;
-    columnId: string;
-  };
-  onClose: () => void;
-}
 
 export function TaskModal({ task, onClose }: TaskModalProps) {
   const queryClient = useQueryClient();
