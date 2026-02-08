@@ -86,7 +86,7 @@ export default function Login() {
                   name="password"
                   placeholder="••••••••"
                   value={formData.password}
-                  type="text"
+                  type="password"
                   onChange={handleChange}
                 />
 
