@@ -64,7 +64,9 @@ export class AuthService {
         where: { email: params.email },
       });
       if (is_user) {
-        throw new Error("User already exists, proceed to login");
+        const err: any = new Error("User already exists, proceed to login");
+        err.statusCode = 409;
+        throw err;
       }
       const password_hash = await bcrypt.hash(params.password, 10);
       const user = await prisma.user.create({
@@ -89,9 +91,12 @@ export class AuthService {
         },
       };
     } catch (error: any) {
-      if (error.code === "P2002")
-        throw new Error("User already exists, proceed to login");
-      throw new Error(error.message);
+      if (error.code === "P2002") {
+        const err: any = new Error("User already exists, proceed to login");
+        err.statusCode = 409;
+        throw err;
+      }
+      throw error;
     }
   }
 
@@ -102,13 +107,13 @@ export class AuthService {
       });
       if (!user) {
         const err: any = new Error("User doesn't exist, create an account");
-        err.name = "BadRequestError";
+        err.statusCode = 401;
         throw err;
       }
       const isMatch = await bcrypt.compare(params.password, user.password);
       if (!isMatch) {
         const err: any = new Error("Incorrect password");
-        err.name = "UnauthorizedError";
+        err.statusCode = 401;
         throw err;
       }
       const { access_token } = await this._generateAccessToken({

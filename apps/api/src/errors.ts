@@ -17,13 +17,20 @@ export type ApiError = {
 export function sendError(res: Response, status: number, error: ApiError) {
   return res.status(status).json({ ...error });
 }
-export function zodError(res: Response, error: z.ZodError) {
+export function zodError(res: Response, error: any) {
+  console.error("Zod validation error:", error);
+  // If error has a statusCode, use it
+  if (typeof error?.statusCode === "number") {
+    return sendError(res, error.statusCode, {
+      message: error.message,
+    });
+  }
   if (
     error instanceof z.ZodError &&
-    (error as z.ZodError).issues &&
-    (error as z.ZodError).issues.length > 0
+    error.issues &&
+    error.issues.length > 0
   ) {
-    const err = (error as z.ZodError).issues[0];
+    const err = error.issues[0];
     return sendError(res, 400, {
       message: err.message,
     });
@@ -32,9 +39,9 @@ export function zodError(res: Response, error: z.ZodError) {
     typeof error === "object" &&
     error !== null &&
     "message" in error &&
-    typeof (error as { message: unknown }).message === "string" &&
-    (error as { message: string }).message.startsWith("[") &&
-    (error as { message: string }).message.includes("message")
+    typeof error.message === "string" &&
+    error.message.startsWith("[") &&
+    error.message.includes("message")
   ) {
     try {
       const arr = JSON.parse(error.message as string);

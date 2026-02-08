@@ -26,14 +26,7 @@ export class TaskService {
       },
     });
     if (!board) throw new Error("Forbidden");
-    console.log("Searching tasks with params:", {
-      column_id,
-      user_id,
-      search,
-      page,
-      limit,
-      priority,
-    });
+
     const where: any = { column_id };
     if (search) {
       where.OR = [
