@@ -16,16 +16,13 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
 });
 
-// Mount routes
 app.use("/auth", authRoutes);
 app.use("/boards", boardRoutes);
 app.use("/columns", columnRoutes);
-app.use("/", taskRoutes); // Mounts /columns/:columnId/tasks and /tasks/:taskId
-app.use("/", commentRoutes); // Mounts /tasks/:taskId/comments
+app.use("/", taskRoutes);
+app.use("/", commentRoutes);
 
-/**
- * 404 handler - must be last
- */
+
 app.use((req, res) => {
   sendError(res, 404, {
     code: "NOT_FOUND",

@@ -6,10 +6,8 @@ import { sendError } from "../errors";
 
 const router = Router();
 
-// All task routes require authentication
 router.use(requireAuth);
 
-// GET /columns/:columnId/tasks
 router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
   try {
     const { columnId } = req.params;
@@ -19,7 +17,6 @@ router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
     const limitNum = parseInt(limit as string, 10);
     const skip = (pageNum - 1) * limitNum;
 
-    // Build where clause
     const where: any = { columnId };
     if (search) {
       where.title = {
@@ -28,7 +25,6 @@ router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
       };
     }
 
-    // Build orderBy
     const orderBy: any = {};
     if (sort === "createdAt" || sort === "title") {
       orderBy[sort] = "asc";
@@ -73,7 +69,6 @@ const createTaskSchema = z.object({
   title: z.string().min(1, "Title is required"),
 });
 
-// POST /columns/:columnId/tasks
 router.post("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
   try {
     const { columnId } = req.params;
@@ -92,7 +87,6 @@ router.post("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
 
     const { title } = validation.data;
 
-    // Verify column exists
     const column = await db.column.findUnique({ where: { id: columnId } });
     if (!column) {
       return sendError(res, 404, {
@@ -128,7 +122,6 @@ const updateTaskSchema = z.object({
   columnId: z.string().optional(),
 });
 
-// PATCH /tasks/:taskId
 router.patch("/tasks/:taskId", async (req: AuthRequest, res) => {
   try {
     const { taskId } = req.params;
@@ -147,7 +140,6 @@ router.patch("/tasks/:taskId", async (req: AuthRequest, res) => {
 
     const data = validation.data;
 
-    // Check if task exists
     const existing = await db.task.findUnique({ where: { id: taskId } });
     if (!existing) {
       return sendError(res, 404, {
@@ -156,7 +148,6 @@ router.patch("/tasks/:taskId", async (req: AuthRequest, res) => {
       });
     }
 
-    // If moving to a new column, verify it exists
     if (data.columnId) {
       const column = await db.column.findUnique({
         where: { id: data.columnId },
@@ -189,12 +180,10 @@ router.patch("/tasks/:taskId", async (req: AuthRequest, res) => {
   }
 });
 
-// DELETE /tasks/:taskId
 router.delete("/tasks/:taskId", async (req: AuthRequest, res) => {
   try {
     const { taskId } = req.params;
 
-    // Check if task exists
     const existing = await db.task.findUnique({ where: { id: taskId } });
     if (!existing) {
       return sendError(res, 404, {
@@ -203,7 +192,6 @@ router.delete("/tasks/:taskId", async (req: AuthRequest, res) => {
       });
     }
 
-    // Delete task and all its comments (cascade)
     await db.task.delete({ where: { id: taskId } });
 
     res.status(204).send();
@@ -216,7 +204,6 @@ router.delete("/tasks/:taskId", async (req: AuthRequest, res) => {
   }
 });
 
-// GET /tasks/:taskId
 router.get("/tasks/:taskId", async (req: AuthRequest, res) => {
   try {
     const { taskId } = req.params;

@@ -6,10 +6,8 @@ import { sendError } from "../errors";
 
 const router = Router();
 
-// All board routes require authentication
 router.use(requireAuth);
 
-// GET /boards
 router.get("/", async (_req: AuthRequest, res) => {
   try {
     const boards = await db.board.findMany();
@@ -23,7 +21,6 @@ router.get("/", async (_req: AuthRequest, res) => {
   }
 });
 
-// GET /boards/:boardId
 router.get("/:boardId", async (req: AuthRequest, res) => {
   try {
     const { boardId } = req.params;
@@ -59,7 +56,6 @@ router.get("/:boardId", async (req: AuthRequest, res) => {
   }
 });
 
-// GET /boards/:boardId/columns
 router.get("/:boardId/columns", async (req: AuthRequest, res) => {
   try {
     const { boardId } = req.params;
@@ -89,7 +85,6 @@ const createColumnSchema = z.object({
   order: z.number().int().min(0),
 });
 
-// POST /boards/:boardId/columns
 router.post("/:boardId/columns", async (req: AuthRequest, res) => {
   try {
     const { boardId } = req.params;
@@ -108,7 +103,6 @@ router.post("/:boardId/columns", async (req: AuthRequest, res) => {
 
     const { title, order } = validation.data;
 
-    // Verify board exists
     const board = await db.board.findUnique({ where: { id: boardId } });
     if (!board) {
       return sendError(res, 404, {

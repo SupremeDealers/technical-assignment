@@ -6,15 +6,12 @@ import { sendError } from "../errors";
 
 const router = Router();
 
-// All comment routes require authentication
 router.use(requireAuth);
 
-// GET /tasks/:taskId/comments
 router.get("/tasks/:taskId/comments", async (req: AuthRequest, res) => {
   try {
     const { taskId } = req.params;
 
-    // Verify task exists
     const task = await db.task.findUnique({ where: { id: taskId } });
     if (!task) {
       return sendError(res, 404, {
@@ -50,7 +47,6 @@ const createCommentSchema = z.object({
   content: z.string().min(1, "Content is required"),
 });
 
-// POST /tasks/:taskId/comments
 router.post("/tasks/:taskId/comments", async (req: AuthRequest, res) => {
   try {
     const { taskId } = req.params;
@@ -69,7 +65,6 @@ router.post("/tasks/:taskId/comments", async (req: AuthRequest, res) => {
 
     const { content } = validation.data;
 
-    // Verify task exists
     const task = await db.task.findUnique({ where: { id: taskId } });
     if (!task) {
       return sendError(res, 404, {

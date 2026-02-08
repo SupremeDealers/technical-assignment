@@ -16,7 +16,6 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-// POST /auth/register
 router.post("/register", async (req, res) => {
   try {
     const validation = registerSchema.safeParse(req.body);
@@ -34,7 +33,6 @@ router.post("/register", async (req, res) => {
 
     const { email, password } = validation.data;
 
-    // Check if user already exists
     const existing = await db.user.findUnique({ where: { email } });
     if (existing) {
       return sendError(res, 409, {
@@ -43,13 +41,11 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // Create user
     const passwordHash = await hashPassword(password);
     const user = await db.user.create({
       data: { email, passwordHash },
     });
 
-    // Generate token
     const token = signToken({ userId: user.id, email: user.email });
 
     res.status(201).json({
@@ -65,7 +61,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// POST /auth/login
 router.post("/login", async (req, res) => {
   try {
     const validation = loginSchema.safeParse(req.body);
@@ -83,7 +78,6 @@ router.post("/login", async (req, res) => {
 
     const { email, password } = validation.data;
 
-    // Find user
     const user = await db.user.findUnique({ where: { email } });
     if (!user) {
       return sendError(res, 401, {
@@ -92,7 +86,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Verify password
     const valid = await comparePassword(password, user.passwordHash);
     if (!valid) {
       return sendError(res, 401, {
@@ -101,7 +94,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Generate token
     const token = signToken({ userId: user.id, email: user.email });
 
     res.json({

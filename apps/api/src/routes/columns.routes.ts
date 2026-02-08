@@ -6,7 +6,6 @@ import { sendError } from "../errors";
 
 const router = Router();
 
-// All column routes require authentication
 router.use(requireAuth);
 
 const updateColumnSchema = z.object({
@@ -14,7 +13,6 @@ const updateColumnSchema = z.object({
   order: z.number().int().min(0).optional(),
 });
 
-// PATCH /columns/:columnId
 router.patch("/:columnId", async (req: AuthRequest, res) => {
   try {
     const { columnId } = req.params;
@@ -33,7 +31,6 @@ router.patch("/:columnId", async (req: AuthRequest, res) => {
 
     const data = validation.data;
 
-    // Check if column exists
     const existing = await db.column.findUnique({ where: { id: columnId } });
     if (!existing) {
       return sendError(res, 404, {
@@ -62,12 +59,10 @@ router.patch("/:columnId", async (req: AuthRequest, res) => {
   }
 });
 
-// DELETE /columns/:columnId
 router.delete("/:columnId", async (req: AuthRequest, res) => {
   try {
     const { columnId } = req.params;
 
-    // Check if column exists
     const existing = await db.column.findUnique({
       where: { id: columnId },
       include: { _count: { select: { tasks: true } } },
@@ -80,7 +75,6 @@ router.delete("/:columnId", async (req: AuthRequest, res) => {
       });
     }
 
-    // Prevent deletion if column has tasks
     if (existing._count.tasks > 0) {
       return sendError(res, 400, {
         code: "BAD_REQUEST",
