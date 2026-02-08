@@ -26,7 +26,7 @@ export function Login() {
     <div className="auth-page">
       <div className="auth-card-new">
         <div className="auth-logo">
-          <h1>Project Alpha</h1>
+          <h1>Kanban Application</h1>
           <p>{isLogin ? "Welcome back! Please sign in to continue." : "Join us! Create an account to get started."}</p>
         </div>
 

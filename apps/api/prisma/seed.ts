@@ -35,7 +35,7 @@ async function main() {
   // 2. Create Board
   const board = await prisma.board.create({
     data: {
-      name: "Project Alpha",
+      name: "Kanban Application",
     },
   });
   console.log(`Board created: ${board.name}`);
@@ -99,7 +99,6 @@ async function main() {
 main()
   .catch((e) => {
     console.error(e);
-    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();

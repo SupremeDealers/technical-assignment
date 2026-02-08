@@ -4,8 +4,8 @@ import { getBoardColumns, getBoards } from "../api/boards";
 import { Column } from "./Column";
 import { useAuth } from "../hooks/useAuth";
 import { TaskModal } from "./TaskModal";
-import { DndContext, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { DndContext,  closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import {  sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { updateTask } from "../api/tasks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -70,8 +70,8 @@ export function Board() {
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <header className="board-header-main">
         <div>
-          <h1 className="project-title">{boards?.[0]?.name || "Project Alpha"}</h1>
-          <p className="project-subtitle">Main development board for {boards?.[0]?.name || "Project Alpha"}</p>
+          <h1 className="project-title">{"Kanban Application"}</h1>
+          <p className="project-subtitle">Main development board for {"Kanban Application"}</p>
         </div>
         
         <div className="user-profile">
