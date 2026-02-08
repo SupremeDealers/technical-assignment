@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id       String   @id @default(uuid())
+  email         String   @unique
+  username      String   @unique
+  password      String
+  refresh_token String   @default("")
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  boards   Board[]
+  tasks    Task[]
+  comments Comment[]
+}
+
+model Board {
+  board_id    String   @id @default(uuid())
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  owner_id    String
+
+  owner   User     @relation(fields: [owner_id], references: [user_id], onDelete: Cascade)
+  columns Column[]
+
+  @@unique([owner_id, board_id])
+}
+
+model Column {
+  column_id  String   @id @default(uuid())
+  name       String
+  position   Int
+  board_id   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  board Board  @relation(fields: [board_id], references: [board_id], onDelete: Cascade)
+  tasks Task[]
+
+  @@index([board_id])
+}
+
+model Task {
+  task_id     String   @id @default(uuid())
+  name        String
+  description String?
+  priority    String   @default("MEDIUM")
+  status      String   @default("TODO")
+  column_id   String
+  task_order  Int @default(0)
+  author_id   String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  column   Column    @relation(fields: [column_id], references: [column_id], onDelete: Cascade)
+  author   User      @relation(fields: [author_id], references: [user_id], onDelete: Cascade)
+  comments Comment[]
+
+  @@index([column_id])
+  @@index([author_id])
+}
+
+model Comment {
+  comment_id String   @id @default(uuid())
+  content    String
+  task_id    String
+  author_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  task   Task @relation(fields: [task_id], references: [task_id], onDelete: Cascade)
+  author User @relation(fields: [author_id], references: [user_id], onDelete: Cascade)
+
+  @@index([task_id])
+  @@index([author_id])
+}
