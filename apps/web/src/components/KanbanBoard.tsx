@@ -1,7 +1,4 @@
-import { useState } from "react";
-import { MdCheckCircle } from "react-icons/md";
-import { IoArchiveOutline } from "react-icons/io5";
-import { FaRegClock } from "react-icons/fa6";
+import React, { useState } from "react";
 import { Column, Task } from "../types";
 import ColumnCard from "./ColumnCard";
 
@@ -9,12 +6,10 @@ interface KanbanBoardProps {
   columns: Column[];
   onTaskMove: ({
     task_id,
-    from_column_id,
     to_column_id,
     new_order,
   }: {
     task_id: string;
-    from_column_id: string;
     to_column_id: string;
     new_order: number;
   }) => void;
@@ -69,7 +64,6 @@ export const KanbanBoard = ({ columns, onTaskMove }: KanbanBoardProps) => {
 
     onTaskMove({
       task_id: draggedTask.task_id,
-      from_column_id: draggedFromColumn,
       to_column_id: targetColumnId,
       new_order: insertIndex,
     });

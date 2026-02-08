@@ -51,7 +51,7 @@ function DraggableColumn({
       item.index = hoverIndex;
     },
   });
-  const [{ isDragging }, drag, preview] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     type: COLUMN_TYPE,
     item: { index: idx },
     collect: (monitor) => ({

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useRegisterForm } from "../hooks/useRegisterForm";
 import { Input } from "../components/Input";
 import { APP_ROUTES } from "../data/route";
+import React from "react";
 
 export const RegisterPage = () => {
   const { formData, errors, isLoading, handleInputChange, handleRegister } =

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "./Select";
-
 import { MODAL_COMPONENTS } from "../store/state/modal.store";
 import { motion } from "framer-motion";
 import { LuSettings2 } from "react-icons/lu";
@@ -48,7 +47,7 @@ const ColumnCard = ({
   const [pageSize, setPageSize] = useState(5);
   const [priority, setPriority] = useState<PRIORITY_ENUM | "">("");
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useTasks({
+  const { data } = useTasks({
     column_id: column.column_id,
     page,
     limit: pageSize,

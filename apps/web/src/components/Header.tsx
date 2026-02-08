@@ -3,9 +3,7 @@ import { useLogout } from "../store/services/auth.service";
 import { useAuthStore } from "../store/state/auth.store";
 import { APP_ROUTES } from "../data/route";
 
-type Props = {};
-
-const Header = (props: Props) => {
+const Header = () => {
   const user = useAuthStore((state) => state.user);
   const logoutMutation = useLogout();
   const navigate = useNavigate();

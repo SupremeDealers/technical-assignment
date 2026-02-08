@@ -1,13 +1,13 @@
 import { Response } from "express";
 import { AuthRequest, TaskSearchQuery } from "../types";
-import { sendError, zodError } from "../errors";
+import { zodError } from "../errors";
 import {
   createTaskSchema,
   MoveTaskInput,
   moveTaskSchema,
   updateTaskSchema,
 } from "../validators";
-import { z, ZodError } from "zod";
+import { z } from "zod";
 import { TaskService } from "../services/task.service";
 
 export class TaskController {

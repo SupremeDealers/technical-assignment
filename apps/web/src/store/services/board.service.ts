@@ -1,14 +1,6 @@
 // Task mutations
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// Utility to invalidate all board-related queries
-const invalidateBoardRelatedQueries = (
-  queryClient: ReturnType<typeof useQueryClient>,
-) => {
-  queryClient.invalidateQueries({ queryKey: ["board"] });
-  queryClient.invalidateQueries({ queryKey: ["tasks"] });
-  queryClient.invalidateQueries({ queryKey: ["boardDetails"] });
-};
 import { baseService } from "./base.service";
 import {
   Board,
@@ -21,6 +13,14 @@ import {
   PRIORITY_ENUM,
 } from "../../types";
 import { BOARD_ROUTES, COMMENT_ROUTES, TASKS_ROUTES } from "./routes";
+
+const invalidateBoardRelatedQueries = (
+  queryClient: ReturnType<typeof useQueryClient>,
+) => {
+  queryClient.invalidateQueries({ queryKey: ["board"] });
+  queryClient.invalidateQueries({ queryKey: ["tasks"] });
+  queryClient.invalidateQueries({ queryKey: ["boardDetails"] });
+};
 
 export const useGetTask = (taskId: string) => {
   return useQuery({
@@ -343,28 +343,6 @@ export const useCreateComment = () => {
       baseService.post<{ comment: Comment }>(
         COMMENT_ROUTES.CREATE_COMMENT.replace(":task_id", taskId),
         data,
-      ),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["comments", variables.taskId],
-      });
-    },
-  });
-};
-
-export const useDeleteComment = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({
-      taskId,
-      commentId,
-    }: {
-      taskId: string;
-      commentId: string;
-    }) =>
-      baseService.delete(
-        COMMENT_ROUTES.DELETE_COMMENT.replace(":comment_id", commentId),
       ),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({

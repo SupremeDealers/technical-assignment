@@ -1,10 +1,8 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.controller";
-import { AuthMiddleware } from "../middleware/auth";
 
 const router = Router();
 const authController = new AuthController();
-const authMiddleware = new AuthMiddleware();
 
 /**
  * @openapi

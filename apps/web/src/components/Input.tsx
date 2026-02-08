@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 interface InputProps {

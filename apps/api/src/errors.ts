@@ -19,17 +19,12 @@ export function sendError(res: Response, status: number, error: ApiError) {
 }
 export function zodError(res: Response, error: any) {
   console.error("Zod validation error:", error);
-  // If error has a statusCode, use it
   if (typeof error?.statusCode === "number") {
     return sendError(res, error.statusCode, {
       message: error.message,
     });
   }
-  if (
-    error instanceof z.ZodError &&
-    error.issues &&
-    error.issues.length > 0
-  ) {
+  if (error instanceof z.ZodError && error.issues && error.issues.length > 0) {
     const err = error.issues[0];
     return sendError(res, 400, {
       message: err.message,
@@ -51,7 +46,9 @@ export function zodError(res: Response, error: any) {
           message: err.message,
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error("Failed to parse error message:", e);
+    }
   }
 
   return sendError(res, 500, {

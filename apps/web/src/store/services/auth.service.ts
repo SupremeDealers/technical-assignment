@@ -1,8 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { baseService } from "./base.service";
-import { AuthResponse, RegisterDto, LoginDto, User } from "../../types";
+import { AuthResponse, RegisterDto, LoginDto } from "../../types";
 import { useAuthStore } from "../state/auth.store";
-import { APP_ROUTES } from "../../data/route";
 import { AUTH_ROUTES } from "./routes";
 
 export const useRegister = () => {

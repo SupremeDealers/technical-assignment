@@ -1,10 +1,6 @@
 import { useParams } from "react-router-dom";
 import { KanbanBoard } from "../components/KanbanBoard";
-import {
-  useBoardDetails,
-  useGetBoard,
-  useMoveTask,
-} from "../store/services/board.service";
+import { useGetBoard, useMoveTask } from "../store/services/board.service";
 import Header from "../components/Header";
 
 export const BoardPage = () => {
@@ -14,12 +10,10 @@ export const BoardPage = () => {
   const moveTaskMutation = useMoveTask();
   const handleTaskMove = ({
     task_id,
-    from_column_id,
     to_column_id,
     new_order,
   }: {
     task_id: string;
-    from_column_id: string;
     to_column_id: string;
     new_order: number;
   }) => {

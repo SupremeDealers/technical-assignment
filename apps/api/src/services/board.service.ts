@@ -88,7 +88,7 @@ export class BoardService {
           columns: {
             createMany: {
               data:
-                columns?.map((col, index) => ({
+                columns?.map((col) => ({
                   name: col.name,
                   position: col.position,
                 })) || [],
@@ -242,6 +242,9 @@ export class BoardService {
   }) {
     try {
       const board = await this.getBoard({ user_id, board_id });
+      if (board.owner_id !== user_id) {
+        throw new Error("Board not found");
+      }
 
       const maxPosition = await prisma.column.aggregate({
         where: { board_id },

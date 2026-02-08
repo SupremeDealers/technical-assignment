@@ -26,7 +26,6 @@ interface SelectProps {
   bg_color?: string;
   border_color?: string;
   text_color?: string;
-  accent_color?: string;
   isMulti?: boolean;
   rounded?: string;
   maxSelections?: number;
@@ -54,7 +53,6 @@ const Select: React.FC<SelectProps> = ({
   border_color = "border-gray-300",
   bg_color = "bg-white",
   text_color = "text-gray-700",
-  accent_color = "text-gray-500",
   isMulti = false,
   rounded = "rounded-md",
   isLoading = false,

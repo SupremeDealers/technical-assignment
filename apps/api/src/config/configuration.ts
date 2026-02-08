@@ -1,5 +1,5 @@
 import { configDotenv } from "dotenv";
-import { bool, cleanEnv, port, str } from "envalid";
+import { cleanEnv, port, str } from "envalid";
 
 configDotenv();
 

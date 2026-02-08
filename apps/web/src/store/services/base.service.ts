@@ -3,6 +3,13 @@ import { APP_ROUTES } from "../../data/route";
 
 // Vite provides types for import.meta.env, so no need to redeclare them
 
+// Fix ImportMeta.env typing for Vite
+declare global {
+  interface ImportMeta {
+    env: Record<string, string>;
+  }
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 class BaseService {
@@ -152,12 +159,8 @@ class BaseService {
     data?: any,
     config?: AxiosRequestConfig,
   ): Promise<T> {
-    try {
-      const response = await this.api.post<T>(url, data, config);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await this.api.post<T>(url, data, config);
+    return response.data;
   }
 
   async put<T>(

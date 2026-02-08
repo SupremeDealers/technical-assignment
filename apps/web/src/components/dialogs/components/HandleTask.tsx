@@ -3,7 +3,6 @@ import Modal from "../Modal";
 import {
   useCreateTask,
   useUpdateTask,
-  useDeleteTask,
   useGetTask,
   useBoardDetails,
 } from "../../../store/services/board.service";

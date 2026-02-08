@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { AuthRequest } from "../types";
 import { CommentService } from "../services/comment.service";
-import { sendError, zodError } from "../errors";
+import { zodError } from "../errors";
 import { createCommentSchema } from "../validators";
 import { z } from "zod";
 

@@ -101,37 +101,33 @@ export class AuthService {
   }
 
   async login(params: LoginUserDto) {
-    try {
-      const user = await prisma.user.findUnique({
-        where: { email: params.email.toLowerCase() },
-      });
-      if (!user) {
-        const err: any = new Error("User doesn't exist, create an account");
-        err.statusCode = 401;
-        throw err;
-      }
-      const isMatch = await bcrypt.compare(params.password, user.password);
-      if (!isMatch) {
-        const err: any = new Error("Incorrect password");
-        err.statusCode = 401;
-        throw err;
-      }
-      const { access_token } = await this._generateAccessToken({
-        user_id: user.user_id,
-      });
-
-      return {
-        message: "Login Successful",
-        access_token,
-        user: {
-          user_id: user.user_id,
-          email: user.email,
-          username: user.username,
-        },
-      };
-    } catch (error: any) {
-      throw error;
+    const user = await prisma.user.findUnique({
+      where: { email: params.email.toLowerCase() },
+    });
+    if (!user) {
+      const err: any = new Error("User doesn't exist, create an account");
+      err.statusCode = 401;
+      throw err;
     }
+    const isMatch = await bcrypt.compare(params.password, user.password);
+    if (!isMatch) {
+      const err: any = new Error("Incorrect password");
+      err.statusCode = 401;
+      throw err;
+    }
+    const { access_token } = await this._generateAccessToken({
+      user_id: user.user_id,
+    });
+
+    return {
+      message: "Login Successful",
+      access_token,
+      user: {
+        user_id: user.user_id,
+        email: user.email,
+        username: user.username,
+      },
+    };
   }
 
   async logout({ token }: { token: string }) {

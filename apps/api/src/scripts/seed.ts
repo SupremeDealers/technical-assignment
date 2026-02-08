@@ -109,32 +109,6 @@ async function main() {
     },
   });
 
-  const task4 = await prisma.task.create({
-    data: {
-      name: "Add task comments",
-      description: "Implement comment functionality for tasks",
-      priority: "MEDIUM",
-      status: "TODO",
-      column_id: todoColumn.column_id,
-      author_id: user1.user_id,
-      task_order: 1,
-    },
-  });
-
-  const task5 = await prisma.task.create({
-    data: {
-      name: "Write tests",
-      description: "Add unit and integration tests for key features",
-      priority: "LOW",
-      status: "TODO",
-      column_id: todoColumn.column_id,
-      author_id: user2.user_id,
-      task_order: 2,
-    },
-  });
-
-  console.log(`✅ Created 5 tasks`);
-
   // Create comments
   await prisma.comment.create({
     data: {
@@ -159,15 +133,6 @@ async function main() {
       author_id: user1.user_id,
     },
   });
-
-  console.log(`✅ Created 3 comments`);
-
-  console.log("\n🎉 Seed completed successfully!");
-  console.log("\n📝 Demo credentials:");
-  console.log("   Email: demo@example.com");
-  console.log("   Password: password123");
-  console.log("\n   Email: alice@example.com");
-  console.log("   Password: password123");
 }
 
 main()
