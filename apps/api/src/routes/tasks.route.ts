@@ -38,6 +38,12 @@ router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
         skip,
         take: limitNum,
         include: {
+          assignedTo: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
           _count: {
             select: { comments: true },
           },
@@ -66,6 +72,9 @@ router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
 
 const createTaskSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
+  userId: z.string().nullable().optional(),
 });
 
 router.post("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
@@ -84,7 +93,7 @@ router.post("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
       });
     }
 
-    const { title } = validation.data;
+    const { title, description, priority, userId } = validation.data;
 
     const column = await db.column.findUnique({ where: { id: columnId } });
     if (!column) {
@@ -97,7 +106,10 @@ router.post("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
     const task = await db.task.create({
       data: {
         title,
+        description,
+        priority: priority ?? "MEDIUM",
         columnId,
+        userId,
       },
       include: {
         _count: {
@@ -118,7 +130,10 @@ router.post("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
 
 const updateTaskSchema = z.object({
   title: z.string().min(1).optional(),
+  description: z.string().optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
   columnId: z.string().optional(),
+  userId: z.string().nullable().optional(),
 });
 
 router.patch("/tasks/:taskId", async (req: AuthRequest, res) => {

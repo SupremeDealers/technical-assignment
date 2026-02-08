@@ -18,17 +18,28 @@ export async function getColumnTasks(
 
 export async function createTask(
   columnId: string,
-  title: string,
+  data: {
+    title: string;
+    description?: string;
+    priority?: string;
+    userId?: string | null;
+  },
 ): Promise<Task> {
   return apiFetch<Task>(`/columns/${columnId}/tasks`, {
     method: "POST",
-    body: JSON.stringify({ title }),
+    body: JSON.stringify(data),
   });
 }
 
 export async function updateTask(
   taskId: string,
-  data: Partial<{ title: string; columnId: string }>,
+  data: Partial<{
+    title: string;
+    description: string;
+    priority: string;
+    columnId: string;
+    userId: string | null;
+  }>,
 ): Promise<Task> {
   return apiFetch<Task>(`/tasks/${taskId}`, {
     method: "PATCH",

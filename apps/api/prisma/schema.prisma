@@ -12,6 +12,7 @@ model User {
   email        String   @unique
   passwordHash String
   comments     Comment[]
+  assignedTasks Task[]
 }
 
 model Board {
@@ -30,19 +31,24 @@ model Column {
 }
 
 model Task {
-  id        String   @id @default(cuid())
-  title     String
-  columnId  String
-  column    Column   @relation(fields: [columnId], references: [id])
-  comments  Comment[]
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH
+  columnId    String
+  column      Column   @relation(fields: [columnId], references: [id])
+  comments    Comment[]
+  assignedTo  User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  createdAt   DateTime @default(now())
 }
 
 model Comment {
-  id      String @id @default(cuid())
-  content String
-  taskId  String
-  userId  String
-  task    Task @relation(fields: [taskId], references: [id])
-  user    User @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  content   String
+  taskId    String
+  userId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }

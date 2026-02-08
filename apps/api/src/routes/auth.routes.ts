@@ -109,4 +109,23 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// GET /auth/users - Fetch all users
+router.get("/users", async (_req, res) => {
+  try {
+    const users = await db.user.findMany({
+      select: {
+        id: true,
+        email: true,
+      },
+    });
+    res.json(users);
+  } catch (error) {
+    console.error("Get users error:", error);
+    return sendError(res, 500, {
+      code: "INTERNAL_ERROR",
+      message: "Failed to fetch users",
+    });
+  }
+});
+
 export default router;
