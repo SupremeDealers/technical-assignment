@@ -21,7 +21,6 @@ router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
     if (search) {
       where.title = {
         contains: search as string,
-        mode: "insensitive",
       };
     }
 

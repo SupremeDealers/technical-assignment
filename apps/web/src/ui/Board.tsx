@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getBoardColumns, getBoards } from "../api/boards";
 import { Column } from "./Column";
@@ -7,6 +7,14 @@ import { useAuth } from "../hooks/useAuth";
 export function Board() {
   const { logout, user } = useAuth();
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [search]);
 
   const { data: boards } = useQuery({
     queryKey: ["boards"],
@@ -66,8 +74,8 @@ export function Board() {
       
       <div className="board-container">
         <div className="columns-wrapper">
-          {columns?.sort((a, b) => a.order - b.order).map((column) => (
-            <Column key={column.id} column={column} search={search} />
+          {[...(columns || [])].sort((a, b) => a.order - b.order).map((column) => (
+            <Column key={column.id} column={column} search={debouncedSearch} />
           ))}
         </div>
       </div>

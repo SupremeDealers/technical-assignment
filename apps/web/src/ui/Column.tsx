@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { getColumnTasks, createTask } from "../api/tasks";
 import { TaskCard } from "./TaskCard";
 import { TaskModal } from "./TaskModal";
@@ -13,9 +13,10 @@ export function Column({ column, search }: ColumnProps) {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [selectedTask, setSelectedTask] = useState<any>(null);
 
-  const { data: tasksData, isLoading } = useQuery({
+  const { data: tasksData, isPlaceholderData } = useQuery({
     queryKey: ["tasks", column.id, search],
     queryFn: () => getColumnTasks(column.id, { search }),
+    placeholderData: keepPreviousData,
   });
 
   const addTaskMutation = useMutation({
@@ -43,7 +44,7 @@ export function Column({ column, search }: ColumnProps) {
         </span>
       </div>
       
-      <div className="task-list">
+      <div className="task-list" style={{ opacity: isPlaceholderData ? 0.6 : 1, transition: "opacity 0.2s" }}>
         {tasksData?.tasks.map((task) => (
           <TaskCard 
             key={task.id} 
