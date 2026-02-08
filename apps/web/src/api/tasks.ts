@@ -3,12 +3,18 @@ import { TasksResponse, Task } from "./apiTypes";
 
 export async function getColumnTasks(
   columnId: string,
-  params: { search?: string; page?: number; limit?: number } = {},
+  params: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    sort?: string;
+  } = {},
 ): Promise<TasksResponse> {
   const query = new URLSearchParams();
   if (params.search) query.set("search", params.search);
   if (params.page) query.set("page", params.page.toString());
   if (params.limit) query.set("limit", params.limit.toString());
+  if (params.sort) query.set("sort", params.sort);
 
   const queryString = query.toString();
   return apiFetch<TasksResponse>(

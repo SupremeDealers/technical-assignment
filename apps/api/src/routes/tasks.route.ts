@@ -24,33 +24,52 @@ router.get("/columns/:columnId/tasks", async (req: AuthRequest, res) => {
       };
     }
 
-    const orderBy: any = {};
-    if (sort === "createdAt" || sort === "title") {
-      orderBy[sort] = "asc";
-    } else {
-      orderBy.createdAt = "asc";
-    }
-
-    const [tasks, total] = await Promise.all([
-      db.task.findMany({
-        where,
-        orderBy,
-        skip,
-        take: limitNum,
-        include: {
-          assignedTo: {
-            select: {
-              id: true,
-              email: true,
-            },
-          },
-          _count: {
-            select: { comments: true },
+    const allTasks = await db.task.findMany({
+      where,
+      include: {
+        assignedTo: {
+          select: {
+            id: true,
+            email: true,
           },
         },
-      }),
-      db.task.count({ where }),
-    ]);
+        _count: {
+          select: { comments: true },
+        },
+      },
+    });
+
+    const sortParam = (sort as string) || "createdAt_desc";
+
+    const priorityOrder: Record<string, number> = {
+      HIGH: 3,
+      MEDIUM: 2,
+      LOW: 1,
+    };
+
+    allTasks.sort((a, b) => {
+      const pA = priorityOrder[(a as any).priority] || 0;
+      const pB = priorityOrder[(b as any).priority] || 0;
+      const timeA = new Date(a.createdAt).getTime();
+      const timeB = new Date(b.createdAt).getTime();
+
+      if (sortParam === "priority_desc" || sortParam === "priority") {
+        if (pA !== pB) return pB - pA; // High > Low
+        return timeB - timeA; // then recent
+      }
+      if (sortParam === "priority_asc") {
+        if (pA !== pB) return pA - pB; // Low > High
+        return timeB - timeA;
+      }
+      if (sortParam === "createdAt_asc") {
+        return timeA - timeB; // Oldest first
+      }
+      // Default: createdAt_desc
+      return timeB - timeA; // Newest first
+    });
+
+    const total = allTasks.length;
+    const tasks = allTasks.slice(skip, skip + limitNum);
 
     res.json({
       tasks,

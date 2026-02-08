@@ -1,7 +1,7 @@
 import React from "react";
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Task } from "../api/tasks";
+import { Task } from "../api/apiTypes";
 
 interface TaskCardProps {
   task: Task;
@@ -42,7 +42,12 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       className="task-card" 
       onClick={onClick}
     >
-      <div className={priorityClass}>{task.priority}</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+        <div className={priorityClass}>{task.priority}</div>
+        <span style={{ fontSize: "12px", color: "#64748b" }}>
+          {new Date(task.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+        </span>
+      </div>
       <div className="task-title">{task.title}</div>
       {task.description && <div className="task-desc">{task.description}</div>}
       
