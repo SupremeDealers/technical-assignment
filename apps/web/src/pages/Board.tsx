@@ -13,6 +13,7 @@ import {
 } from "@dnd-kit/core";
 import { useAuth } from "../hooks/useAuth";
 import { TaskCardOverlay } from "../components/board/TaskCard";
+import { CreateTaskModal } from "../components/modals/TaskModal";
 
 export const BoardPage = () => {
   const queryClient = useQueryClient();
@@ -24,12 +25,20 @@ export const BoardPage = () => {
   const [movingTaskId, setMovingTaskId] = React.useState<number | null>(null);
 
   const reorderTasks = useMutation({
-    mutationFn: async ({ columnId, tasks }: { columnId: number; tasks: any[] }) => {
-      await Promise.all(tasks.map((t, idx) => tasksApi.updateTask(t.id, { order: idx })));
+    mutationFn: async ({
+      columnId,
+      tasks,
+    }: {
+      columnId: number;
+      tasks: any[];
+    }) => {
+      await Promise.all(
+        tasks.map((t, idx) => tasksApi.updateTask(t.id, { order: idx })),
+      );
       return columnId;
     },
-    onSettled: (_data, _error, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["tasks", variables.columnId] });
+    onSettled: (_data, _error, columnId) => {
+      queryClient.invalidateQueries({ queryKey: ["tasks", columnId] });
     },
   });
 
@@ -39,6 +48,7 @@ export const BoardPage = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
+    //  If dropped outside a valid target
     if (!over) {
       setActiveTask(null);
       return;
@@ -71,11 +81,22 @@ export const BoardPage = () => {
       return;
     }
 
+    // Reorder within the same column
     if (activeColumnId === targetColumnId) {
-      const key = ["tasks", targetColumnId] as const;
-      const current = (queryClient.getQueryData(key) as any[]) ?? [];
+      const dndEnabled = (active.data.current as any)?.dndEnabled;
+      const key = (active.data.current as any)?.queryKey as
+        | readonly unknown[]
+        | undefined;
 
-      const oldIndex = current.findIndex((t) => t?.id === activeTaskId);
+      if (!dndEnabled || !Array.isArray(key)) {
+        setActiveTask(null);
+        return;
+      }
+
+      const currentData = queryClient.getQueryData(key) as any;
+      const currentItems = (currentData?.items as any[]) ?? [];
+
+      const oldIndex = currentItems.findIndex((t) => t?.id === activeTaskId);
       if (oldIndex === -1) {
         setActiveTask(null);
         return;
@@ -86,17 +107,20 @@ export const BoardPage = () => {
       if (overType === "Task") {
         const overTaskId = (over.data.current as any)?.taskId;
         if (typeof overTaskId === "number") {
-          const idx = current.findIndex((t) => t?.id === overTaskId);
+          const idx = currentItems.findIndex((t) => t?.id === overTaskId);
           if (idx !== -1) newIndex = idx;
         }
       } else if (overType === "Column") {
-        newIndex = Math.max(0, current.length - 1);
+        newIndex = Math.max(0, currentItems.length - 1);
       }
 
       if (newIndex !== oldIndex) {
-        const next = arrayMove(current, oldIndex, newIndex);
-        queryClient.setQueryData(key, next);
-        reorderTasks.mutate({ columnId: targetColumnId, tasks: next });
+        const nextItems = arrayMove(currentItems, oldIndex, newIndex);
+        queryClient.setQueryData(key, {
+          ...currentData,
+          items: nextItems,
+        });
+        reorderTasks.mutate({ columnId: targetColumnId, tasks: nextItems });
       }
 
       setActiveTask(null);
@@ -150,6 +174,7 @@ export const BoardPage = () => {
           <DragOverlay dropAnimation={null}>
             {activeTask ? <TaskCardOverlay task={activeTask} /> : null}
           </DragOverlay>
+          <CreateTaskModal />
         </DndContext>
       </main>
     </div>

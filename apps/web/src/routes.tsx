@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { LoginPage } from "./pages/Login";
 import { RegisterPage } from "./pages/Register";
 import { BoardPage } from "./pages/Board";
+import { TaskDetails } from "./pages/TaskDetails";
 
 // Simple Auth Guard
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -24,6 +25,17 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <BoardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/tasks/:taskId",
+    element: (
+      <ProtectedRoute>
+        <>
+          <BoardPage />
+          <TaskDetails />
+        </>
       </ProtectedRoute>
     ),
   },

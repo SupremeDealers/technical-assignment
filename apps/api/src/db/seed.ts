@@ -1,3 +1,4 @@
+import "../env";
 import db from './client';
 import bcrypt from 'bcryptjs';
 
@@ -11,15 +12,19 @@ const seed = async () => {
   db.exec('DELETE FROM boards');
   db.exec('DELETE FROM users');
 
+  const demoEmail = process.env.SEED_DEMO_EMAIL ?? 'demo@example.com';
+  const demoPassword = process.env.SEED_DEMO_PASSWORD ?? 'Pwd@1234';
+  const boardName = process.env.SEED_BOARD_NAME ?? 'Team Board';
+
   // Create User
-  const hashedPassword = await bcrypt.hash('Pwd@1234', 10);
+  const hashedPassword = await bcrypt.hash(demoPassword, 10);
   const insertUser = db.prepare('INSERT INTO users (email, password) VALUES (?, ?)');
-  const userResult = insertUser.run('demo@example.com', hashedPassword);
+  const userResult = insertUser.run(demoEmail, hashedPassword);
   const userId = userResult.lastInsertRowid;
 
   // Create Board
   const insertBoard = db.prepare('INSERT INTO boards (name, owner_id) VALUES (?, ?)');
-  const boardResult = insertBoard.run('Team Board', userId);
+  const boardResult = insertBoard.run(boardName, userId);
   const boardId = boardResult.lastInsertRowid;
 
   // Create Columns

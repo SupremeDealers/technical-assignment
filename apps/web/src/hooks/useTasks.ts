@@ -8,20 +8,49 @@ export const useBoard = () => {
   });
 };
 
-export const useTasks = (columnId: number) => {
+type TaskQuery = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  sort?: tasksApi.TaskSort;
+};
+
+const defaultTaskQuery = {
+  search: '',
+  page: 1,
+  limit: 50,
+  sort: 'order' as const,
+};
+
+export const useTasks = (columnId: number, query?: TaskQuery) => {
+  const q = {
+    ...defaultTaskQuery,
+    ...query,
+    search: (query?.search ?? '').trim(),
+  };
+
   return useQuery({
-    queryKey: ['tasks', columnId],
-    queryFn: () => tasksApi.getTasks(columnId),
+    queryKey: ['tasks', columnId, q.search, q.page, q.limit, q.sort],
+    queryFn: () => tasksApi.getTasks(columnId, q),
+  });
+};
+
+export const useTask = (taskId: number | null) => {
+  return useQuery({
+    queryKey: ['task', taskId],
+    queryFn: () => tasksApi.getTask(taskId as number),
+    enabled: typeof taskId === 'number' && !Number.isNaN(taskId),
   });
 };
 
 export const useCreateTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ columnId, data }: { columnId: number; data: any }) => 
+    mutationFn: ({ columnId, data }: { columnId: number; data: any }) =>
       tasksApi.createTask(columnId, data),
-    onSuccess: (_, variables) => {
+    onSuccess: (_created, variables) => {
       queryClient.invalidateQueries({ queryKey: ['tasks', variables.columnId] });
+      queryClient.invalidateQueries({ queryKey: ['board'] });
     },
   });
 };
@@ -30,58 +59,12 @@ export const useUpdateTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ taskId, data }: { taskId: number; data: any }) => tasksApi.updateTask(taskId, data),
-    onMutate: async (variables) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks'] });
-
-      const previous = queryClient.getQueriesData({ queryKey: ['tasks'] });
-
-      const nextColumnId = variables?.data?.columnId;
-      if (typeof nextColumnId !== 'number' || Number.isNaN(nextColumnId)) {
-        return { previous };
-      }
-
-      let fromColumnId: number | null = null;
-      let taskToMove: any | null = null;
-
-      for (const [key, value] of previous) {
-        if (!Array.isArray(value)) continue;
-        const found = value.find((t: any) => t?.id === variables.taskId);
-        if (found) {
-          fromColumnId = (key as any)?.[1] ?? null;
-          taskToMove = found;
-          break;
-        }
-      }
-
-      if (typeof fromColumnId !== 'number' || fromColumnId === nextColumnId || !taskToMove) {
-        return { previous };
-      }
-
-      queryClient.setQueryData(['tasks', fromColumnId], (old: any) => {
-        if (!Array.isArray(old)) return old;
-        return old.filter((t: any) => t?.id !== variables.taskId);
-      });
-
-      queryClient.setQueryData(['tasks', nextColumnId], (old: any) => {
-        const list = Array.isArray(old) ? old : [];
-        const updated = {
-          ...taskToMove,
-          columnId: nextColumnId,
-          column_id: nextColumnId,
-        };
-        return [...list, updated];
-      });
-
-      return { previous };
-    },
-    onError: (_err, _variables, context) => {
-      context?.previous?.forEach(([key, value]) => {
-        queryClient.setQueryData(key, value);
-      });
-    },
-    onSettled: () => {
+    mutationFn: ({ taskId, data }: { taskId: number; data: any }) =>
+      tasksApi.updateTask(taskId, data),
+    onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
+      queryClient.invalidateQueries({ queryKey: ['board'] });
     },
   });
 };
@@ -90,8 +73,10 @@ export const useDeleteTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: tasksApi.deleteTask,
-    onSuccess: () => {
+    onSuccess: (_data, taskId) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['task', taskId] });
+      queryClient.invalidateQueries({ queryKey: ['board'] });
     },
   });
 };

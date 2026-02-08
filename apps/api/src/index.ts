@@ -1,9 +1,10 @@
-import express from "express";
+import "./env";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { sendError, ServiceError } from "./utils/errors";
-import authRoutes from './routes/auth.routes';
-import taskRoutes from './routes/task.routes';
-import commentRoutes from './routes/comment.routes';
+import authRoutes from "./routes/auth.routes";
+import taskRoutes from "./routes/task.routes";
+import commentRoutes from "./routes/comment.routes";
 import { ZodError } from "zod";
 
 const app = express();
@@ -15,14 +16,10 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
 });
 
-app.use('/auth', authRoutes);
-app.use('/', taskRoutes);
-app.use('/', commentRoutes);
+app.use("/auth", authRoutes);
+app.use("/", taskRoutes);
+app.use("/", commentRoutes);
 
-/**
- * Example: how we want errors shaped.
- * Candidates should re-use this for their implementation.
- */
 app.use((req, res) => {
   sendError(res, 404, {
     code: "NOT_FOUND",
@@ -31,7 +28,7 @@ app.use((req, res) => {
 });
 
 // Global Error Handler
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
 
   if (err instanceof ServiceError) {
@@ -44,22 +41,29 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
   if (err instanceof ZodError) {
     return sendError(res, 400, {
-      code: 'BAD_REQUEST',
-      message: 'Validation failed',
+      code: "BAD_REQUEST",
+      message: "Validation failed",
       details: err.issues,
     });
   }
 
   return sendError(res, 500, {
-    code: 'INTERNAL',
-    message: 'Internal Server Error',
+    code: "INTERNAL",
+    message: "Internal Server Error",
   });
 });
 
-
 const port = Number(process.env.PORT ?? 4000);
-app.listen(port, () => {
-  console.log(`[api] listening on http://localhost:${port}`);
-});
+
+const isTestRun =
+  process.env.NODE_ENV === "test" ||
+  process.env.npm_lifecycle_event === "test" ||
+  typeof process.env.VITEST_WORKER_ID !== "undefined";
+
+if (!isTestRun) {
+  app.listen(port, () => {
+    console.log(`[api] listening on http://localhost:${port}`);
+  });
+}
 
 export default app;

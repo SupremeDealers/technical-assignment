@@ -2,9 +2,11 @@ node_modules
 dist
 coverage
 .env
+.env.*
 .env.local
 .DS_Store
 apps/**/node_modules
 apps/**/dist
 apps/**/coverage
 apps/**/.env
+apps/**/.env.*

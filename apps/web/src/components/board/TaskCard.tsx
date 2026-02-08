@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 interface TaskCardProps {
   task: Task;
   forceHidden?: boolean;
+  queryKey?: readonly unknown[];
+  dndEnabled?: boolean;
 }
 
 const priorityColors = {
@@ -16,9 +18,12 @@ const priorityColors = {
   HIGH: 'bg-red-100 text-red-800',
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, forceHidden }) => {
-  const columnId = (task as any).columnId ?? (task as any).column_id;
-
+export const TaskCard: React.FC<TaskCardProps> = ({
+  task,
+  forceHidden,
+  queryKey,
+  dndEnabled = true,
+}) => {
   const {
     attributes,
     listeners,
@@ -28,7 +33,15 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, forceHidden }) => {
     isDragging,
   } = useSortable({
     id: `task-${task.id}`,
-    data: { type: 'Task', taskId: task.id, columnId, task },
+    disabled: !dndEnabled,
+    data: {
+      type: 'Task',
+      taskId: task.id,
+      columnId: task.columnId,
+      task,
+      queryKey,
+      dndEnabled,
+    },
   });
 
   const style = {
@@ -52,7 +65,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, forceHidden }) => {
         </span>
         <Link 
           to={`/tasks/${task.id}`} 
-          className="text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="relative z-10 cursor-pointer text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+          onPointerDown={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
           onClick={(e) => e.stopPropagation()} 
         >
           Details
