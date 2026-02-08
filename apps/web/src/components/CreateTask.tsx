@@ -3,10 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ModalWrapper from "./ModalWrapper";
 import { createTask } from "../utils/tasks";
 import { Column } from "../types/types";
-
-function getApiErrorMessage(err: any) {
-  return err?.response?.data?.error?.message || "Failed to create task";
-}
+import { getErrorMessage } from "../lib/common";
 
 export default function CreateTask({
   open,
@@ -28,7 +25,11 @@ export default function CreateTask({
   const [columnId, setColumnId] = useState<string>(defaultColumnId);
 
   const mutation = useMutation({
-    mutationFn: (payload: any) => createTask(boardId, payload),
+    mutationFn: (payload: {
+      title: string;
+      description: string | undefined;
+      columnId: string;
+    }) => createTask(boardId, payload),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["tasks", boardId] });
       setTitle("");
@@ -94,7 +95,7 @@ export default function CreateTask({
 
         {mutation.isError && (
           <p className="text-sm text-red-600" role="alert">
-            {getApiErrorMessage(mutation.error)}
+            {getErrorMessage(mutation.error)}
           </p>
         )}
 

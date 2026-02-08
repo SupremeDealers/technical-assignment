@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBoards } from "../utils/boards";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { getTasks, moveTask } from "../utils/tasks";
-import { ChangeEvent, useEffect, useState } from "react";
+import { deleteTask, getTasks, moveTask } from "../utils/tasks";
+import { useEffect, useState } from "react";
 import CreateTask from "../components/CreateTask";
-import { Column } from "../types/types";
+import { Column, Task } from "../types/types";
 import { getColumns } from "../utils/columns";
 import TaskDetails from "../components/TaskDetails";
 import { getErrorMessage } from "../lib/common";
@@ -18,7 +18,7 @@ export default function Board() {
 
   const [openCreate, setOpenCreate] = useState(false);
   const [openTask, setOpenTask] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<any | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const limit = 5;
@@ -67,10 +67,21 @@ export default function Board() {
     placeholderData: (previousData) => previousData,
   });
 
-  const move = useMutation({
-    mutationFn: ({ id, columnId }: any) => moveTask(id, columnId),
+  const delTask = useMutation({
+    mutationFn: ({ id }: { id: string }) => deleteTask(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks", boardId] }),
   });
+
+  const move = useMutation({
+    mutationFn: ({ id, columnId }: { id: string; columnId: string }) =>
+      moveTask(id, columnId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks", boardId] }),
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    nav("/login");
+  };
 
   if (!boardId) {
     return (
@@ -106,9 +117,15 @@ export default function Board() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      <div onClick={handleLogout} className="w-full flex justify-end">
+        <button className="px-3 py-1 bg-red-500 text-white rounded-xl hover:bg-red-700">
+          Logout
+        </button>
+      </div>
       <h1 className="text-2xl text-center font-semibold">
         Welcome {profile.name}
       </h1>
+
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold mb-6">{boardsData[0].name}</h1>
         <p className="text-sm text-gray-500">
@@ -117,14 +134,15 @@ export default function Board() {
 
         <div className="flex gap-2 w-full sm:w-auto">
           <input
-            className="w-full sm:w-72 rounded border px-3 py-2 text-sm"
+            className="w-full sm:w-72 rounded-xl border px-3 py-2 text-sm"
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search tasks"
           />
+
           <button
-            className="px-3 py-2 rounded-2xl bg-black text-white"
+            className="px-3 py-1 text-xs sm:text-sm rounded-xl bg-blue-500 text-white hover:bg-blue-700"
             onClick={() => setOpenCreate(true)}
           >
             New task
@@ -133,7 +151,7 @@ export default function Board() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {columns.map((col: any) => (
+        {columns.map((col: Column) => (
           <div
             key={col.id}
             className="bg-white rounded-xl shadow-sm border p-4"
@@ -142,8 +160,8 @@ export default function Board() {
 
             <div className="space-y-3">
               {data?.tasks
-                ?.filter((t: any) => t.columnId === col.id)
-                .map((task: any) => (
+                ?.filter((t: Task) => t.columnId === col.id)
+                .map((task: Task) => (
                   <button
                     key={task.id}
                     onClick={() => {
@@ -152,7 +170,20 @@ export default function Board() {
                     }}
                     className="w-full text-left bg-gray-50 border rounded-lg p-3 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
                   >
-                    <p className="font-medium text-sm">{task.title}</p>
+                    <div className="w-full flex items-center justify-between">
+                      <p className="font-medium text-sm">{task.title}</p>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          delTask.mutate({
+                            id: task?.id,
+                          });
+                        }}
+                        className="text-red-400 hover:text-red-700"
+                      >
+                        X
+                      </span>
+                    </div>
 
                     {task.description && (
                       <p className="text-xs text-gray-500 mt-1">
@@ -172,7 +203,7 @@ export default function Board() {
                         })
                       }
                     >
-                      {columns.map((c: any) => (
+                      {columns.map((c: Column) => (
                         <option key={c.id} value={c.id}>
                           {c.name}
                         </option>
@@ -181,13 +212,17 @@ export default function Board() {
                   </button>
                 ))}
 
-              {data?.tasks?.filter((t: any) => t.columnId === col.id).length ===
-                0 && <p className="text-xs text-gray-400">No tasks</p>}
+              {data?.tasks?.filter((t: Task) => t.columnId === col.id)
+                .length === 0 && (
+                <p className="text-xs text-gray-400">No tasks</p>
+              )}
             </div>
           </div>
         ))}
       </div>
+
       <Pagination meta={meta} setPage={setPage} />
+
       <CreateTask
         open={openCreate}
         onClose={() => setOpenCreate(false)}

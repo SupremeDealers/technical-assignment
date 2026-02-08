@@ -32,10 +32,10 @@ export default function Login() {
   };
   return (
     <section className="relative min-h-screen bg-secondary flex items-center justify-center px-4">
-      <section className="w-full max-w-[820px]">
+      <section className="w-full max-w-205">
         <section className="relative z-10 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 sm:p-10 text-text-primary shadow-xl">
           <form
-            className="mx-auto w-full max-w-[440px] space-y-6"
+            className="mx-auto w-full max-w-110 space-y-6"
             onSubmit={(e) => e.preventDefault()}
           >
             <div className="flex rounded-xl bg-white/5 p-1">

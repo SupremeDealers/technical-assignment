@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addComment, getComments } from "../utils/comments";
 import ModalWrapper from "./ModalWrapper";
 import { getErrorMessage } from "../lib/common";
+import { Comment, Task } from "../types/types";
 
 export default function TaskDetails({
   open,
@@ -11,7 +12,7 @@ export default function TaskDetails({
 }: {
   open: boolean;
   onClose: () => void;
-  task: any | null;
+  task: Task | null;
 }) {
   const qc = useQueryClient();
   const taskId = task?.id as string | undefined;
@@ -66,14 +67,14 @@ export default function TaskDetails({
             )}
 
             <div className="space-y-2">
-              {comments.map((c: any) => (
+              {comments.map((c: Comment) => (
                 <div
                   key={c.id}
                   className="rounded border bg-gray-50 p-3 text-sm"
                 >
                   <p>{c.body}</p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {c.author?.name ?? "Unknown"} •{" "}
+                    {c.author?.name ?? "Unknown"} -{" "}
                     {new Date(c.createdAt).toLocaleString()}
                   </p>
                 </div>
@@ -91,7 +92,7 @@ export default function TaskDetails({
               <label className="block">
                 <span className="text-sm font-medium">Add comment</span>
                 <textarea
-                  className="mt-1 w-full rounded border px-3 py-2 min-h-[80px]"
+                  className="mt-1 w-full rounded border px-3 py-2 min-h-20"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
                   aria-label="Add comment"
@@ -108,7 +109,7 @@ export default function TaskDetails({
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-3 py-2 rounded bg-black text-white disabled:opacity-60"
+                  className="px-3 py-1 rounded-xl bg-blue-500 hover:bg-blue-700 text-white disabled:opacity-60"
                   disabled={create.isPending}
                 >
                   {create.isPending ? "Posting..." : "Post comment"}

@@ -12,7 +12,7 @@ export default function Pagination({ meta, setPage }: PaginationProps) {
 
       <div className="flex gap-2">
         <button
-          className="px-3 py-2 rounded border disabled:opacity-50"
+          className="px-3 py-2 rounded border disabled:opacity-50 hover:bg-black hover:text-white"
           onClick={() => setPage(Math.max(1, meta.page - 1))}
           disabled={meta.page === 1}
         >
@@ -20,7 +20,7 @@ export default function Pagination({ meta, setPage }: PaginationProps) {
         </button>
 
         <button
-          className="px-3 py-2 rounded border disabled:opacity-50"
+          className="px-3 py-2 rounded border disabled:opacity-50 hover:bg-black hover:text-white"
           onClick={() => setPage(meta.page + 1)}
           disabled={!meta.hasNext}
         >

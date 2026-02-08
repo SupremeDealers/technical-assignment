@@ -18,7 +18,14 @@ export async function getTasks(
   }
 }
 
-export async function createTask(boardId: string, payload: any) {
+export async function createTask(
+  boardId: string,
+  payload: {
+    title: string;
+    description: string | undefined;
+    columnId: string;
+  },
+) {
   try {
     const res = await apiClient.post(`/boards/${boardId}/tasks`, payload);
     return res.data;
@@ -30,5 +37,10 @@ export async function createTask(boardId: string, payload: any) {
 
 export async function moveTask(id: string, columnId: string) {
   const res = await apiClient.patch(`/tasks/${id}/move`, { columnId });
+  return res.data;
+}
+
+export async function deleteTask(id: string) {
+  const res = await apiClient.delete(`/tasks/${id}/delete`);
   return res.data;
 }

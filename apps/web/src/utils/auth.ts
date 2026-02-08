@@ -10,8 +10,8 @@ export async function signup(data: {
   email: string;
   password: string;
 }) {
-  const res = await apiClient.post("/auth/register", data);
-  return res.data;
+  const res = await apiClient.post("/auth/signup", data);
+  return res.data.data;
 }
 
 export async function me() {

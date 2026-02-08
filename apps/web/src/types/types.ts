@@ -29,6 +29,7 @@ export interface Tasks {
   tasks: Task[];
   meta: Meta;
 }
+
 export interface Profile {
   id: string;
   email: string;
@@ -41,4 +42,16 @@ export interface Board {
   ownerId: string;
   createdAt: string;
   columns: Column[];
+}
+
+export interface Comment {
+  id: string;
+  body: string;
+  createdAt: Date;
+  taskId: string;
+  authorId: string;
+  author: {
+    id: string;
+    name: string;
+  };
 }

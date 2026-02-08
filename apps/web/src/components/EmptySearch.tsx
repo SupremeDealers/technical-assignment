@@ -10,7 +10,7 @@ export default function EmptySearch({
   setSearch,
 }: EmptyProps) {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-200 p-6 flex items-center justify-center">
       <div className="max-w-xl rounded-xl border bg-white p-6">
         <h2 className="text-lg font-semibold">
           {debouncedVal ? "No matching tasks" : "No tasks yet"}
