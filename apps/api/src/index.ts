@@ -22,7 +22,6 @@ app.use("/columns", columnRoutes);
 app.use("/", taskRoutes);
 app.use("/", commentRoutes);
 
-
 app.use((req, res) => {
   sendError(res, 404, {
     code: "NOT_FOUND",
@@ -30,9 +29,11 @@ app.use((req, res) => {
   });
 });
 
-const port = Number(process.env.PORT ?? 4000);
-app.listen(port, () => {
-  console.log(`[api] listening on http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  const port = Number(process.env.PORT ?? 4000);
+  app.listen(port, () => {
+    console.log(`[api] listening on http://localhost:${port}`);
+  });
+}
 
 export default app;

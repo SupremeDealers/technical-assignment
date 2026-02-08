@@ -15,6 +15,6 @@ describe("App", () => {
         </AuthProvider>
       </QueryClientProvider>
     );
-    expect(screen.getByText(/Log In/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Sign In/i)[0]).toBeInTheDocument();
   });
 });
