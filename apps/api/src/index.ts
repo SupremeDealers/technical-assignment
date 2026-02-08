@@ -1,6 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { sendError } from "./errors";
+import authRoutes from "./routes/auth.routes";
+import boardRoutes from "./routes/boards.routes";
+import columnRoutes from "./routes/columns.routes";
+import taskRoutes from "./routes/tasks.route";
+import commentRoutes from "./routes/comments.routes";
 
 const app = express();
 
@@ -11,9 +16,15 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
 });
 
+// Mount routes
+app.use("/auth", authRoutes);
+app.use("/boards", boardRoutes);
+app.use("/columns", columnRoutes);
+app.use("/", taskRoutes); // Mounts /columns/:columnId/tasks and /tasks/:taskId
+app.use("/", commentRoutes); // Mounts /tasks/:taskId/comments
+
 /**
- * Example: how we want errors shaped.
- * Candidates should re-use this for their implementation.
+ * 404 handler - must be last
  */
 app.use((req, res) => {
   sendError(res, 404, {

@@ -6,6 +6,7 @@ export type ApiErrorCode =
   | "FORBIDDEN"
   | "NOT_FOUND"
   | "CONFLICT"
+  | "INTERNAL_ERROR"
   | "INTERNAL";
 
 export type ApiError = {
