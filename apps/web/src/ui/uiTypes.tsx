@@ -25,3 +25,12 @@ export type TaskModalProps = {
   };
   onClose: () => void;
 }
+
+export type ColumnProp = {
+  column: {
+    id: string;
+    title: string;
+  };
+  search: string;
+  onAddTask: () => void;
+}

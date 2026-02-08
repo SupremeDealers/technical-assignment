@@ -5,17 +5,11 @@ import { TaskCard } from "./TaskCard";
 import { TaskModal } from "./TaskModal";
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { ColumnProp } from "./uiTypes";
 
-interface ColumnProps {
-  column: {
-    id: string;
-    title: string;
-  };
-  search: string;
-  onAddTask: () => void;
-}
 
-export function Column({ column, search, onAddTask }: ColumnProps) {
+
+export function Column({ column, search, onAddTask }: ColumnProp) {
   const [selectedTask, setSelectedTask] = useState<any>(null);
 
   const { data: tasksData } = useQuery({

@@ -49,7 +49,6 @@ export function Board() {
     const taskId = active.id;
     const overId = over.id;
 
-    // Check if we dropped over a column or a task
     let targetColumnId = overId;
     if (over.data.current?.type === 'Task') {
       targetColumnId = over.data.current.task.columnId;
