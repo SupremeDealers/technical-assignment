@@ -12,6 +12,8 @@ import { getErrorMessage } from "../lib/common";
 import Pagination from "../components/Pagination";
 import EmptySearch from "../components/EmptySearch";
 import ErrorDisplay from "../components/ErrorDisplay";
+import { RiDeleteBinLine } from "@remixicon/react";
+import Tasks from "../components/Tasks";
 export default function Board() {
   const nav = useNavigate();
   const qc = useQueryClient();
@@ -162,54 +164,15 @@ export default function Board() {
               {data?.tasks
                 ?.filter((t: Task) => t.columnId === col.id)
                 .map((task: Task) => (
-                  <button
-                    key={task.id}
-                    onClick={() => {
-                      setSelectedTask(task);
-                      setOpenTask(true);
-                    }}
-                    className="w-full text-left bg-gray-50 border rounded-lg p-3 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
-                  >
-                    <div className="w-full flex items-center justify-between">
-                      <p className="font-medium text-sm">{task.title}</p>
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          delTask.mutate({
-                            id: task?.id,
-                          });
-                        }}
-                        className="text-red-400 hover:text-red-700"
-                      >
-                        X
-                      </span>
-                    </div>
-
-                    {task.description && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        {task.description}
-                      </p>
-                    )}
-
-                    <select
-                      className="mt-2 w-full text-sm border rounded px-2 py-1"
-                      value={task.columnId}
-                      aria-label="Move task"
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) =>
-                        move.mutate({
-                          id: task.id,
-                          columnId: e.target.value,
-                        })
-                      }
-                    >
-                      {columns.map((c: Column) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </button>
+                  <Tasks
+                    task={task}
+                    columns={columns}
+                    setSelectedTask={setSelectedTask}
+                    delTask={delTask}
+                    move={move}
+                    setOpenTask={setOpenTask}
+                    boardId={boardId}
+                  />
                 ))}
 
               {data?.tasks?.filter((t: Task) => t.columnId === col.id)

@@ -44,3 +44,11 @@ export async function deleteTask(id: string) {
   const res = await apiClient.delete(`/tasks/${id}/delete`);
   return res.data;
 }
+
+export async function updateTask(
+  taskId: string,
+  payload: { title?: string; description?: string },
+) {
+  const res = await apiClient.patch(`/tasks/${taskId}`, payload);
+  return res.data.data;
+}
