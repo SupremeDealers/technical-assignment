@@ -77,7 +77,7 @@ const ColumnCard = ({
   return (
     <motion.div
       key={column.column_id}
-      className="flex flex-col bg-white border border-gray-200 h-full rounded-lg min-h-[600px]"
+      className="flex flex-col bg-white border border-gray-200 h-full rounded-lg shadow min-h-[600px]"
       onDragOver={handleDragOver}
       onDrop={(e) => handleDrop(e, column.column_id)}
       initial={{ opacity: 0, y: 20 }}
@@ -90,8 +90,8 @@ const ColumnCard = ({
       }}
     >
       {/* Column Header */}
-      <div className="flex flex-col items-center justify-between  px-3 py-2 border-b border-gray-200">
-        <div className="flex items-center justify-between  px-3 py-2 w-full ">
+      <div className="flex flex-col items-center justify-between  p-2 border-b border-gray-200">
+        <div className="flex items-center justify-between  py-1 w-full ">
           <div className="flex items-center gap-2">
             <button
               onClick={() =>

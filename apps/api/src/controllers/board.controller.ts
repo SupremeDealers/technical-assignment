@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../types";
-
-import { sendError } from "../errors";
+import { sendError, zodError } from "../errors";
 import {
   createBoardSchema,
   updateBoardSchema,
@@ -30,10 +29,7 @@ export class BoardController {
       });
       res.json(boards);
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch boards",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -46,16 +42,7 @@ export class BoardController {
       });
       res.json(board);
     } catch (error) {
-      if (error instanceof Error && error.message === "Board not found") {
-        return sendError(res, 404, {
-          code: "NOT_FOUND",
-          message: "Board not found",
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch board",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
   getBoardDetails = async (req: AuthRequest, res: Response) => {
@@ -67,16 +54,7 @@ export class BoardController {
       });
       res.json(board);
     } catch (error) {
-      if (error instanceof Error && error.message === "Board not found") {
-        return sendError(res, 404, {
-          code: "NOT_FOUND",
-          message: "Board not found",
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch board",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -89,20 +67,7 @@ export class BoardController {
       });
       res.status(201).json(board);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to create board",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -117,20 +82,7 @@ export class BoardController {
       });
       res.json(updatedBoard);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to update board",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -143,10 +95,7 @@ export class BoardController {
       });
       res.status(204).send();
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to delete board",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -160,10 +109,7 @@ export class BoardController {
       });
       res.json(columns);
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch columns",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -178,20 +124,7 @@ export class BoardController {
       });
       res.status(201).json(column);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to create column",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -206,20 +139,7 @@ export class BoardController {
       });
       res.json(updatedColumn);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to update column",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -232,10 +152,7 @@ export class BoardController {
       });
       res.status(201).json({ message: "Column deleted successfully" });
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to delete column",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -243,14 +160,18 @@ export class BoardController {
     try {
       const { column_id } = req.params;
       const user_id = req.user?.user_id;
-      if (!user_id) return res.status(401).json({ error: "Unauthorized" });
+      if (!user_id) {
+        return sendError(res, 401, {
+          message: "Unauthorized",
+        });
+      }
       const column = await this.boardService.getColumnById({
         column_id,
         user_id,
       });
       return res.json(column);
     } catch (error: any) {
-      return res.status(404).json({ error: error.message });
+      return zodError(res, error as z.ZodError);
     }
   };
 }

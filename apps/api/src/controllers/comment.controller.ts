@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { AuthRequest } from "../types";
 import { CommentService } from "../services/comment.service";
-import { sendError } from "../errors";
+import { sendError, zodError } from "../errors";
 import { createCommentSchema } from "../validators";
 import { z } from "zod";
 
@@ -23,10 +23,7 @@ export class CommentController {
       });
       res.json(comments);
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch comments",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -42,20 +39,7 @@ export class CommentController {
       });
       res.status(201).json(comment);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to create comment",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -66,12 +50,9 @@ export class CommentController {
         comment_id: commentId,
         user_id: req.user_id!,
       });
-      res.status(204).send();
+      res.status(200).json({ message: "Comment deleted successfully" });
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to delete comment",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 }

@@ -5,7 +5,7 @@ configDotenv();
 
 export const Env = cleanEnv(process.env, {
   NODE_ENV: str({
-    choices: ["development", "staging", "production"],
+    choices: ["test", "development", "staging", "production"],
   }),
   PORT: port({ default: 8000 }),
   JWT_ACCESS_SECRET: str(),

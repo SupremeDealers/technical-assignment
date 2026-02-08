@@ -56,7 +56,6 @@ export const useLogout = () => {
       console.log("Logged out successfully");
       baseService.removeToken();
       logout();
-      // Invalidate all relevant queries
       queryClient.invalidateQueries({ queryKey: ["board"] });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["boardDetails"] });
@@ -64,13 +63,5 @@ export const useLogout = () => {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       queryClient.invalidateQueries({ queryKey: ["boards"] });
     },
-  });
-};
-
-export const useCurrentUser = () => {
-  return useQuery({
-    queryKey: ["currentUser"],
-    queryFn: () => baseService.get<{ user: User }>("/auth/me"),
-    retry: false,
   });
 };

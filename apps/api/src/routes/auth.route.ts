@@ -160,28 +160,4 @@ router.post("/logout", authController.logout);
  */
 router.post("/refresh", authController.refreshToken);
 
-/**
- * @openapi
- * /auth/me:
- *   get:
- *     tags:
- *       - Authentication
- *     summary: Get current user
- *     security:
- *       - BearerAuth: []
- *     responses:
- *       200:
- *         description: Current user data
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       401:
- *         description: Unauthorized
- */
-router.get("/me", authMiddleware.authenticate, authController.me);
-
 export default router;

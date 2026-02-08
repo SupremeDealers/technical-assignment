@@ -22,20 +22,27 @@ const HandleTask = ({ onClose }: Props) => {
   const columnIdParam = searchParams.get("column_id") || "";
   const taskId = searchParams.get("task_id") || "";
 
-  // Task fields
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<PRIORITY_ENUM>(PRIORITY_ENUM.MEDIUM);
   const [columnId, setColumnId] = useState(columnIdParam);
   const [errors, setErrors] = useState<Record<string, string | null>>({});
-
-  // Data hooks
   const createTaskMutation = useCreateTask();
   const updateTaskMutation = useUpdateTask();
-  const deleteTaskMutation = useDeleteTask();
-  const { data: taskData, isLoading: isTaskLoading } = useGetTask(taskId);
-  const { data: boardDetails, isLoading: isBoardLoading } =
-    useBoardDetails(boardId);
+  const {
+    data: taskData,
+    isLoading: isTaskLoading,
+    refetch: refetchTask,
+  } = useGetTask(taskId);
+  const {
+    data: boardDetails,
+    isLoading: isBoardLoading,
+    refetch: refetchBoard,
+  } = useBoardDetails(boardId);
+  useEffect(() => {
+    if (taskId) refetchTask();
+    if (boardId) refetchBoard();
+  }, [taskId, boardId]);
 
   // Populate form if editing
   useEffect(() => {

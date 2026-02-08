@@ -30,7 +30,7 @@ const CommentCard = ({ taskId }: Props) => {
       {data.map((comment) => (
         <div
           key={comment.comment_id}
-          className="bg-gray-100 rounded p-2 text-xs"
+          className="bg-gray-100 border border-gray-300 rounded p-2 text-xs"
         >
           <div className="font-semibold text-gray-700 mb-1">
             {comment.author?.username || "User"}

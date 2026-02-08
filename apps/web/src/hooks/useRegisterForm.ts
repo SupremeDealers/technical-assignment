@@ -61,18 +61,15 @@ export const useRegisterForm = () => {
 
     try {
       await registerMutation.mutateAsync(formData);
-      // Navigation happens in useEffect on success
     } catch (error: any) {
-      // Try to extract validation details from API error response
+      console.error("Registration error:", error?.response);
       let errorMessage =
         error?.response?.data?.message ||
         error?.message ||
         "Network error. Please check your connection.";
 
-      // Check for Zod or API validation details array
       const details = error?.response?.data?.error?.details;
       if (Array.isArray(details) && details.length > 0) {
-        // Join all messages, fallback to JSON if not present
         errorMessage = details
           .map((d: any) => d.message || JSON.stringify(d))
           .join("\n");
@@ -82,9 +79,6 @@ export const useRegisterForm = () => {
         type: "error",
         title: errorMessage,
       });
-
-      setErrors({ form: errorMessage });
-      console.error("Registration failed:", errorMessage);
     }
   };
 
@@ -95,25 +89,25 @@ export const useRegisterForm = () => {
     }
   }, [registerMutation.isSuccess, navigate]);
 
-  useEffect(() => {
-    if (registerMutation.isError) {
-      const error: any = registerMutation.error;
-      let errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Registration failed. Please try again.";
+  // useEffect(() => {
+  //   if (registerMutation.isError) {
+  //     const error: any = registerMutation.error;
+  //     let errorMessage =
+  //       error?.response?.data?.message ||
+  //       error?.message ||
+  //       "Registration failed. Please try again.";
 
-      const details = error?.response?.data?.error?.details;
-      if (Array.isArray(details) && details.length > 0) {
-        errorMessage = details
-          .map((d: any) => d.message || JSON.stringify(d))
-          .join("\n");
-      }
+  //     const details = error?.response?.data?.error?.details;
+  //     if (Array.isArray(details) && details.length > 0) {
+  //       errorMessage = details
+  //         .map((d: any) => d.message || JSON.stringify(d))
+  //         .join("\n");
+  //     }
 
-      setErrors({ form: errorMessage });
-      console.error("Registration error:", errorMessage);
-    }
-  }, [registerMutation.isError, registerMutation.error]);
+  //     setErrors({ form: errorMessage });
+  //     console.error("Registration error:", errorMessage);
+  //   }
+  // }, [registerMutation.isError, registerMutation.error]);
 
   return {
     formData,

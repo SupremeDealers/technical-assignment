@@ -38,40 +38,15 @@ app.use("/comments", commentRoutes);
  */
 app.use((req, res) => {
   sendError(res, 404, {
-    code: "NOT_FOUND",
     message: `Route not found: ${req.method} ${req.path}`,
   });
 });
 
-// Global error handler - must be after all routes
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
-    // Handle JSON parsing errors from body-parser
-    if (err instanceof SyntaxError && "body" in err) {
-      return sendError(res, 400, {
-        code: "BAD_REQUEST",
-        message: "Invalid JSON format in request body",
-        details: err.message,
-      });
-    }
-
-    // Handle other errors
-    console.error("Unhandled error:", err);
-    return sendError(res, 500, {
-      code: "INTERNAL",
-      message: "An unexpected error occurred",
-    });
-  },
-);
-
 const port = Number(process.env.PORT ?? 4000);
-app.listen(port, () => {
-  console.log(`[api] listening on http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`[api] listening on http://localhost:${port}`);
+  });
+}
 
 export default app;

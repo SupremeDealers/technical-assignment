@@ -101,10 +101,16 @@ export class AuthService {
         where: { email: params.email.toLowerCase() },
       });
       if (!user) {
-        throw new Error("User doesn't exist, create an account");
+        const err: any = new Error("User doesn't exist, create an account");
+        err.name = "BadRequestError";
+        throw err;
       }
       const isMatch = await bcrypt.compare(params.password, user.password);
-      if (!isMatch) throw new Error("Incorrect password");
+      if (!isMatch) {
+        const err: any = new Error("Incorrect password");
+        err.name = "UnauthorizedError";
+        throw err;
+      }
       const { access_token } = await this._generateAccessToken({
         user_id: user.user_id,
       });
@@ -119,7 +125,7 @@ export class AuthService {
         },
       };
     } catch (error: any) {
-      throw new Error(error);
+      throw error;
     }
   }
 

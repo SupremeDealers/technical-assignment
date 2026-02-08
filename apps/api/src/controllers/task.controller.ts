@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest, TaskSearchQuery } from "../types";
-import { sendError } from "../errors";
+import { sendError, zodError } from "../errors";
 import {
   createTaskSchema,
   MoveTaskInput,
@@ -31,10 +31,7 @@ export class TaskController {
       });
       res.json(result);
     } catch (error) {
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch tasks",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -47,16 +44,7 @@ export class TaskController {
       });
       res.json(task);
     } catch (error) {
-      if (error instanceof Error && error.message === "Task not found") {
-        return sendError(res, 404, {
-          code: "NOT_FOUND",
-          message: "Task not found",
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to fetch task",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -72,20 +60,7 @@ export class TaskController {
       });
       res.status(200).json(task);
     } catch (error) {
-      if (error instanceof ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e: any) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: (error instanceof Error ? error.message : "Failed to move task"),
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
   createTask = async (req: AuthRequest, res: Response) => {
@@ -99,20 +74,7 @@ export class TaskController {
       });
       res.status(201).json(task);
     } catch (error) {
-      if (error instanceof ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e: any) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to create task",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -132,20 +94,7 @@ export class TaskController {
       });
       res.json(task);
     } catch (error) {
-      if (error instanceof ZodError) {
-        return sendError(res, 400, {
-          code: "BAD_REQUEST",
-          message: "Validation error",
-          details: error.issues.map((e: any) => ({
-            path: e.path.join("."),
-            issue: e.message,
-          })),
-        });
-      }
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: "Failed to update task",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 
@@ -158,11 +107,7 @@ export class TaskController {
       });
       res.status(200).json({ message: "Task deleted successfully" });
     } catch (error) {
-      console.log("Error deleting task:", error); // Debug log
-      return sendError(res, 500, {
-        code: "INTERNAL",
-        message: error instanceof Error ? error.message : "Failed to delete task",
-      });
+      return zodError(res, error as z.ZodError);
     }
   };
 }

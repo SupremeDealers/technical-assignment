@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../store/services/auth.service";
+import { showToast } from "../components/tools/toast";
 
 export const useLoginForm = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -12,7 +13,6 @@ export const useLoginForm = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
     }
@@ -44,15 +44,16 @@ export const useLoginForm = () => {
 
     try {
       await loginMutation.mutateAsync(formData);
-      // Navigation happens in useEffect on success
     } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ||
         error?.message ||
         "Network error. Please check your connection.";
 
-      setErrors({ form: errorMessage });
-      console.error("Login failed:", errorMessage);
+      showToast({
+        type: "error",
+        title: errorMessage,
+      });
     }
   };
 
@@ -62,19 +63,6 @@ export const useLoginForm = () => {
       navigate("/dashboard");
     }
   }, [loginMutation.isSuccess, navigate]);
-
-  useEffect(() => {
-    if (loginMutation.isError) {
-      const error: any = loginMutation.error;
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Invalid email or password";
-
-      setErrors({ form: errorMessage });
-      console.error("Login error:", errorMessage);
-    }
-  }, [loginMutation.isError, loginMutation.error]);
 
   return {
     formData,

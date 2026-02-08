@@ -150,41 +150,39 @@ export const DashboardPage = () => {
                       </button>
                     </div>
                   </div>
-                  <Modal
-                    open={deleteModal.open}
-                    onOpenChange={handleCloseDeleteModal}
-                    className="md:max-w-120"
-                  >
-                    <div className="px-4">
-                      <h3 className="text-lg font-semibold py-2 text-center">
-                        Delete Board?
-                      </h3>
-                      <p className="text-gray-600 mb-4 text-center">
-                        Are you sure you want to delete this board? This action
-                        cannot be undone.
-                      </p>
-                    </div>
-                    <div className="flex gap-2 w-full items-center justify-center">
-                      <button
-                        onClick={handleCloseDeleteModal}
-                        className="px-4 py-2 rounded w-full bg-gray-200 text-gray-700 hover:bg-gray-300 font-semibold"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={handleConfirmDelete}
-                        className="px-4 py-2 rounded w-full bg-red-600 text-white hover:bg-red-700 font-semibold disabled:opacity-60"
-                        disabled={deleteBoardMutation.isPending}
-                      >
-                        {deleteBoardMutation.isPending
-                          ? "Deleting..."
-                          : "Delete"}
-                      </button>
-                    </div>
-                  </Modal>
                 </div>
               </div>
             ))}
+          <Modal
+            open={deleteModal.open}
+            onOpenChange={handleCloseDeleteModal}
+            className="md:max-w-120"
+          >
+            <div className="px-4">
+              <h3 className="text-lg font-semibold py-2 text-center">
+                Delete Board?
+              </h3>
+              <p className="text-gray-600 mb-4 text-center">
+                Are you sure you want to delete this board? This action cannot
+                be undone.
+              </p>
+            </div>
+            <div className="flex gap-2 w-full items-center justify-center">
+              <button
+                onClick={handleCloseDeleteModal}
+                className="px-4 py-2 rounded w-full bg-gray-200 text-gray-700 hover:bg-gray-300 font-semibold"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 rounded w-full bg-red-600 text-white hover:bg-red-700 font-semibold disabled:opacity-60"
+                disabled={deleteBoardMutation.isPending}
+              >
+                {deleteBoardMutation.isPending ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </Modal>
         </div>
       </main>
     </div>
