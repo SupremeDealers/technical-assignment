@@ -3,7 +3,7 @@ import { z } from "zod";
 export const createTaskSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  columnId: z.string().uuid(),
+  columnId: z.uuid(),
 });
 
 export const updateTaskSchema = z.object({
@@ -12,6 +12,6 @@ export const updateTaskSchema = z.object({
 });
 
 export const moveTaskSchema = z.object({
-  columnId: z.string().uuid(),
+  columnId: z.uuid(),
   position: z.number().int().optional(),
 });

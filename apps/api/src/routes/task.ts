@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Response, Router } from "express";
 import z from "zod";
 import { prisma } from "../db/prisma";
 import { sendError } from "../errors";
@@ -17,7 +17,7 @@ router.get(
   requireAuth,
   async (req: AuthRequest, res) => {
     const { boardId } = req.params;
-    const search = String(req.query.q || "");
+    const search = String(req.query.search || "");
 
     const { page, limit, skip } = getPagination(req);
 
@@ -166,6 +166,17 @@ router.patch(
     });
 
     return res.json(task);
+  },
+);
+
+router.delete(
+  "/tasks/:taskId/delete",
+  requireAuth,
+  async (req: AuthRequest, res: Response) => {
+    const { taskId } = req.params;
+    await prisma.task.delete({ where: { id: taskId } });
+
+    return res.json({ message: "Task Deleted Successfully" });
   },
 );
 

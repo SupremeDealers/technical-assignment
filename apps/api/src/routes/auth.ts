@@ -21,7 +21,7 @@ router.post(
       if (exists) {
         return res.status(409).json({
           code: "EMAIL_EXISTS",
-          message: `Email already registered: ${req.method} ${req.path}`,
+          message: `Email already registered`,
         });
       }
 

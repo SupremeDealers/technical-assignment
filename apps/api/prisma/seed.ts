@@ -22,28 +22,44 @@ async function main() {
   // Create demo users
   const password = await bcrypt.hash("password123", 10);
 
-  const user = await prisma.user.create({
-    data: {
-      email: "demo@test.com",
-      name: "Demo User",
-      password,
-    },
+  await prisma.user.createMany({
+    data: [
+      {
+        email: "demo@test.com",
+        name: "Demo User",
+        password,
+      },
+      {
+        email: "dmj@dev.co",
+        name: "DMJ",
+        password,
+      },
+    ],
   });
+
+  const users = await prisma.user.findMany();
 
   console.log("Demo user:");
   console.log("Email: demo@test.com");
   console.log("Password: password123");
 
   // Create board
-  const board = await prisma.board.create({
-    data: {
-      name: "Demo Board",
-      ownerId: user.id,
-    },
-  });
+  let board;
+  for (const user of users) {
+    board = await prisma.board.create({
+      data: {
+        name: "Demo Board",
+        ownerId: user.id,
+      },
+    });
+  }
+
+  if (!board) {
+    throw new Error("Failed to create board");
+  }
 
   // Create columns
-  const columns = await prisma.column.createMany({
+  await prisma.column.createMany({
     data: [
       { name: "Todo", order: 1, boardId: board.id },
       { name: "In Progress", order: 2, boardId: board.id },
@@ -55,6 +71,12 @@ async function main() {
     where: { boardId: board.id, name: "Todo" },
   });
 
+  if (!todo) {
+    throw new Error("Failed to find Todo column");
+  }
+
+  const lastUser = users[users.length - 1];
+
   // Create tasks
   await prisma.task.createMany({
     data: [
@@ -63,7 +85,7 @@ async function main() {
         description: "Install dependencies",
         boardId: board.id,
         columnId: todo.id,
-        authorId: user.id,
+        authorId: lastUser.id,
         position: 1,
       },
       {
@@ -71,7 +93,7 @@ async function main() {
         description: "Register & login",
         boardId: board.id,
         columnId: todo.id,
-        authorId: user.id,
+        authorId: lastUser.id,
         position: 2,
       },
       {
@@ -79,7 +101,7 @@ async function main() {
         description: "CRUD + pagination",
         boardId: board.id,
         columnId: todo.id,
-        authorId: user.id,
+        authorId: lastUser.id,
         position: 3,
       },
     ],

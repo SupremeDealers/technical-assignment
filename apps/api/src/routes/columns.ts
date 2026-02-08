@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/columns", requireAuth, async (req: AuthRequest, res) => {
   const columns = await prisma.column.findMany();
-
+  
   res.json(columns);
 });
 
