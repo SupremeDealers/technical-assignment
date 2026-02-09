@@ -30,8 +30,8 @@ router.get("/", async (req: AuthRequest, res: Response) => {
 router.get("/:boardId", async (req: AuthRequest, res: Response) => {
   try {
     const board = db
-      .prepare("SELECT * FROM boards WHERE id = ?")
-      .get(req.params.boardId);
+      .prepare("SELECT * FROM boards WHERE id = ? AND owner_id = ?")
+      .get(req.params.boardId, req.userId);
 
     if (!board) {
       return sendError(res, 404, {
