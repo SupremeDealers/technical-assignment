@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    font-size: 20px;
+}
+
+body {
+    font-family: 'Public Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar for minimalist look */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #000000;
+}
+
+/* Hover inversion effect for Swiss style */
+.hover-invert:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+.hover-invert:hover svg, .hover-invert:hover span {
+    color: #ffffff !important;
+}
+
+/* Strict borders */
+.border-strict {
+    border: 1px solid #000000;
+}
