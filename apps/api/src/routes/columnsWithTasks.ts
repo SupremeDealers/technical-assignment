@@ -35,33 +35,42 @@ router.get("/:columnId/tasks", async (req: AuthRequest, res: Response) => {
     const columnId = req.params.columnId;
     const offset = (page - 1) * limit;
 
-    let query = "SELECT * FROM tasks WHERE column_id = ?";
-    const params: (string | number)[] = [columnId];
+    let query =
+      "SELECT t.* FROM tasks t " +
+      "JOIN columns c ON t.column_id = c.id " +
+      "JOIN boards b ON c.board_id = b.id " +
+      "WHERE t.column_id = ? AND b.user_id = ?";
+    const params: (string | number)[] = [columnId, req.userId as string | number];
 
     if (search) {
-      query += " AND (title LIKE ? OR description LIKE ?)";
+      query += " AND (t.title LIKE ? OR t.description LIKE ?)";
       params.push(`%${search}%`, `%${search}%`);
     }
 
     // Add sorting
     const sortMap: Record<string, string> = {
-      createdAt: "created_at DESC",
-      priority: "CASE priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END",
-      title: "title ASC",
+      createdAt: "t.created_at DESC",
+      priority:
+        "CASE t.priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END",
+      title: "t.title ASC",
     };
 
-    query += ` ORDER BY ${sortMap[sort]}, position`;
+    query += ` ORDER BY ${sortMap[sort]}, t.position`;
     query += " LIMIT ? OFFSET ?";
     params.push(limit, offset);
 
     const tasks = db.prepare(query).all(...params);
 
     // Get total count for pagination
-    let countQuery = "SELECT COUNT(*) as count FROM tasks WHERE column_id = ?";
-    const countParams: (string | number)[] = [columnId];
+    let countQuery =
+      "SELECT COUNT(*) as count FROM tasks t " +
+      "JOIN columns c ON t.column_id = c.id " +
+      "JOIN boards b ON c.board_id = b.id " +
+      "WHERE t.column_id = ? AND b.user_id = ?";
+    const countParams: (string | number)[] = [columnId, req.userId as string | number];
 
     if (search) {
-      countQuery += " AND (title LIKE ? OR description LIKE ?)";
+      countQuery += " AND (t.title LIKE ? OR t.description LIKE ?)";
       countParams.push(`%${search}%`, `%${search}%`);
     }
 
