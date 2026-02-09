@@ -16,7 +16,7 @@ export const LoginPage = () => {
 
   return (
     <div className="flex  justify-center items-center min-h-screen bg-white p-2">
-      <div className=" md:min-w-125 w-full md:max-w-190 max-w-[90vw] bg-white rounded-2xl px-6 py-12 shadow border border-gray-100">
+      <div className=" md:min-w-125 w-full md:max-w-190 max-w-[90vw] bg-white rounded-2xl px-6 py-12 shadow border border-gray-200">
         {/* Logo */}
         <div className="text-center flex flex-col gap-2 ">
           <h1 className="text-3xl font-semibold  text-gray-900">
