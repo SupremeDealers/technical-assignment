@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import request from "supertest";
 import app from "../src/index";
-import { db } from "../src/db/db";
+import { db, initDb } from "../src/db/db";
 
 describe("Auth API", () => {
   beforeAll(() => {
+    initDb();
     // Clear test user if exists
     db.prepare("DELETE FROM users WHERE email = ?").run("test@example.com");
   });
