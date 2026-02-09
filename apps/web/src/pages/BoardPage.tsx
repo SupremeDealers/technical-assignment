@@ -96,52 +96,60 @@ export function BoardPage() {
   }
 
   function handleDragOver(event: DragOverEvent) {
-    const { active, over } = event;
+    const { over } = event;
+
+    // We no longer persist changes on every drag over to avoid generating
+    // a large number of PATCH requests while the pointer moves.
+    // Column changes are now persisted once in handleDragEnd.
     if (!over) return;
-
-    const activeTaskId = active.id as number;
-    const overColumnId = over.id as number;
-
-    const activeTask = allTasks.find((t) => t.id === activeTaskId);
-    if (!activeTask) return;
-
-    // Check if we're dragging over a different column
-    if (activeTask.column_id !== overColumnId) {
-      updateTaskMutation.mutate({
-        id: activeTaskId,
-        data: { column_id: overColumnId },
-      });
-    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
     setActiveTask(null);
-    
+
     const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    if (!over) return;
 
     const activeTaskId = active.id as number;
-    const overTaskId = over.id as number;
-
     const activeTask = allTasks.find((t) => t.id === activeTaskId);
-    const overTask = allTasks.find((t) => t.id === overTaskId);
+    if (!activeTask) return;
 
-    if (!activeTask || !overTask) return;
+    const overId = over.id as number;
+    const overTask = allTasks.find((t) => t.id === overId);
 
-    // If tasks are in the same column, reorder them
-    if (activeTask.column_id === overTask.column_id) {
-      const columnTasks = allTasks
-        .filter((t) => t.column_id === activeTask.column_id)
-        .sort((a, b) => a.position - b.position);
+    if (overTask) {
+      // If tasks are in the same column, reorder them
+      if (activeTask.column_id === overTask.column_id) {
+        const columnTasks = allTasks
+          .filter((t) => t.column_id === activeTask.column_id)
+          .sort((a, b) => a.position - b.position);
 
-      const oldIndex = columnTasks.findIndex((t) => t.id === activeTaskId);
-      const newIndex = columnTasks.findIndex((t) => t.id === overTaskId);
+        const oldIndex = columnTasks.findIndex((t) => t.id === activeTaskId);
+        const newIndex = columnTasks.findIndex((t) => t.id === overId);
 
-      if (oldIndex !== newIndex) {
-        // Update position for the moved task
+        if (oldIndex !== newIndex) {
+          // Update position for the moved task
+          updateTaskMutation.mutate({
+            id: activeTaskId,
+            data: { position: newIndex },
+          });
+        }
+      } else {
+        // Dropped over a task in a different column: move to that column
+        if (activeTask.column_id !== overTask.column_id) {
+          updateTaskMutation.mutate({
+            id: activeTaskId,
+            data: { column_id: overTask.column_id },
+          });
+        }
+      }
+    } else {
+      // Dropped over a column (over.id is a column id)
+      const overColumnId = overId;
+      if (activeTask.column_id !== overColumnId) {
         updateTaskMutation.mutate({
           id: activeTaskId,
-          data: { position: newIndex },
+          data: { column_id: overColumnId },
         });
       }
     }
