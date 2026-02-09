@@ -1,18 +1,53 @@
-export function App() {
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <h1 style={{ margin: 0 }}>Team Boards (starter)</h1>
-      <p style={{ maxWidth: 760, lineHeight: 1.4 }}>
-        This is a minimal scaffold. Candidates will implement routing, auth, board UI,
-        tasks, comments, and all required behaviors.
-      </p>
+import { Routes, Route, Navigate } from "react-router-dom";
+import { LoginPage } from "../pages/LoginPage";
+import { RegisterPage } from "../pages/RegisterPage";
+import { DashboardPage } from "../pages/DashboardPage";
+import { BoardPage } from "../pages/BoardPage";
+import { APP_ROUTES } from "../data/route";
+import { baseService } from "../store/services/base.service";
 
-      <section style={{ marginTop: 16, padding: 16, border: "1px solid #ddd", borderRadius: 12 }}>
-        <h2 style={{ marginTop: 0 }}>API connectivity check</h2>
-        <p>
-          Ensure the API is running and visit <code>/health</code> on port 4000.
-        </p>
-      </section>
-    </div>
+export function App() {
+  const isAuthenticated = baseService.getToken() !== null;
+  return (
+    <Routes>
+      <Route
+        path={APP_ROUTES.LOGIN_PAGE}
+        element={
+          isAuthenticated ? (
+            <Navigate to={APP_ROUTES.DASHBOARD_PAGE} replace />
+          ) : (
+            <LoginPage />
+          )
+        }
+      />
+      <Route
+        path={APP_ROUTES.REGISTER_PAGE}
+        element={
+          isAuthenticated ? (
+            <Navigate to={APP_ROUTES.DASHBOARD_PAGE} replace />
+          ) : (
+            <RegisterPage />
+          )
+        }
+      />
+
+      <Route path={APP_ROUTES.DASHBOARD_PAGE} element={<DashboardPage />} />
+      <Route path={APP_ROUTES.BOARD_PAGE} element={<BoardPage />} />
+
+      {/* Default redirect */}
+      <Route
+        path="/"
+        element={
+          <Navigate
+            to={
+              isAuthenticated
+                ? APP_ROUTES.DASHBOARD_PAGE
+                : APP_ROUTES.LOGIN_PAGE
+            }
+            replace
+          />
+        }
+      />
+    </Routes>
   );
 }

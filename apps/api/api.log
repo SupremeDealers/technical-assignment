@@ -1,0 +1,47 @@
+[dotenv@17.2.4] injecting env (7) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[api] listening on http://localhost:4000
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
+2:57:13 PM [tsx] change in ./src/controllers/auth.controller.ts Restarting...
+c[dotenv@17.2.4] injecting env (7) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[api] listening on http://localhost:4000
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
+Register request body: {
+  email: 'demod@example.com',
+  username: 'stag pass',
+  password: '123456',
+  confirm_password: '123456'
+}
