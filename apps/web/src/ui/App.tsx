@@ -1,18 +1,32 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import { LoginPage } from "../pages/LoginPage";
+import { RegisterPage } from "../pages/RegisterPage";
+import { HomePage } from "../pages/HomePage";
+import { BoardPage } from "../pages/BoardPage";
+import { ProtectedRoute } from "../components/ProtectedRoute";
+
 export function App() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <h1 style={{ margin: 0 }}>Team Boards (starter)</h1>
-      <p style={{ maxWidth: 760, lineHeight: 1.4 }}>
-        This is a minimal scaffold. Candidates will implement routing, auth, board UI,
-        tasks, comments, and all required behaviors.
-      </p>
-
-      <section style={{ marginTop: 16, padding: 16, border: "1px solid #ddd", borderRadius: 12 }}>
-        <h2 style={{ marginTop: 0 }}>API connectivity check</h2>
-        <p>
-          Ensure the API is running and visit <code>/health</code> on port 4000.
-        </p>
-      </section>
-    </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/board/:boardId"
+        element={
+          <ProtectedRoute>
+            <BoardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
