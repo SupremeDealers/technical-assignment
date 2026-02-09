@@ -1,18 +1,40 @@
-export function App() {
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <h1 style={{ margin: 0 }}>Team Boards (starter)</h1>
-      <p style={{ maxWidth: 760, lineHeight: 1.4 }}>
-        This is a minimal scaffold. Candidates will implement routing, auth, board UI,
-        tasks, comments, and all required behaviors.
-      </p>
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "../core/AuthContext";
+import { AuthScreen } from "./features/auth/AuthScreen";
+import { Board } from "./features/kanban/Board";
 
-      <section style={{ marginTop: 16, padding: 16, border: "1px solid #ddd", borderRadius: 12 }}>
-        <h2 style={{ marginTop: 0 }}>API connectivity check</h2>
-        <p>
-          Ensure the API is running and visit <code>/health</code> on port 4000.
-        </p>
-      </section>
+const AppContent = () => {
+  const { token } = useAuth();
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Routes>
+        <Route
+          path="/login"
+          element={!token ? <AuthScreen mode="login" /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/register"
+          element={
+            !token ? <AuthScreen mode="register" /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/"
+          element={token ? <Board /> : <Navigate to="/login" />}
+        />
+      </Routes>
     </div>
   );
-}
+};
+
+export const App = () => {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </AuthProvider>
+  );
+};

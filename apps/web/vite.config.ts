@@ -1,9 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
-    port: 5173
-  }
+    port: 5173,
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./test/setup.ts",
+  },
 });
