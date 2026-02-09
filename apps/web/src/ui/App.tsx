@@ -1,18 +1,40 @@
-export function App() {
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <h1 style={{ margin: 0 }}>Team Boards (starter)</h1>
-      <p style={{ maxWidth: 760, lineHeight: 1.4 }}>
-        This is a minimal scaffold. Candidates will implement routing, auth, board UI,
-        tasks, comments, and all required behaviors.
-      </p>
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import { LoginPage } from "../pages/LoginPage";
+import { RegisterPage } from "../pages/RegisterPage";
+import { BoardListPage } from "../pages/BoardListPage";
+import { Spinner } from "../components/Spinner";
 
-      <section style={{ marginTop: 16, padding: 16, border: "1px solid #ddd", borderRadius: 12 }}>
-        <h2 style={{ marginTop: 0 }}>API connectivity check</h2>
-        <p>
-          Ensure the API is running and visit <code>/health</code> on port 4000.
-        </p>
-      </section>
-    </div>
-  );
+export function App() {
+  const { user, isLoading } = useAuth();
+  const [currentPage, setCurrentPage] = useState<"login" | "register">("login");
+
+  // Update body class based on current page
+  useEffect(() => {
+    if (isLoading) {
+      document.body.className = "";
+    } else if (!user) {
+      document.body.className = "auth-page";
+    } else {
+      document.body.className = "board-page";
+    }
+  }, [user, isLoading]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!user) {
+    return (
+      <>
+        {currentPage === "login" ? (
+          <LoginPage onSwitchToRegister={() => setCurrentPage("register")} />
+        ) : (
+          <RegisterPage onSwitchToLogin={() => setCurrentPage("login")} />
+        )}
+      </>
+    );
+  }
+
+  return <BoardListPage />;
 }

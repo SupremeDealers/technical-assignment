@@ -70,11 +70,17 @@ pnpm install
 
 ### Dev (runs both apps)
 ```bash
+# First-time setup: initialize database
+pnpm -C apps/api db:migrate
+pnpm -C apps/api db:seed
+
+# Start development servers
 pnpm dev
 ```
 
 - API: http://localhost:4000 (health: `/health`)
 - Web: http://localhost:5173
+- **Demo Login:** email: `demo@example.com` / password: `password123`
 
 ### Tests / Lint / Build
 ```bash
@@ -166,9 +172,62 @@ Comments:
 
 ## Reviewer quick checklist (internal)
 - `pnpm install && pnpm dev` works
-- Auth works and blocks unauth’d access
+- Auth works and blocks unauth'd access
 - Create/edit/move task works
 - Search + pagination works
 - Comments view/add works
 - CI is green; tests are meaningful
 - README explains tradeoffs + known limitations
+
+---
+
+## Implementation Notes
+
+### What was built
+
+This implementation includes:
+
+**Backend (Express + Prisma + SQLite)**
+- Complete auth system (register/login with JWT)
+- All REST endpoints for boards, columns, tasks, comments
+- Comprehensive error handling with consistent error shapes
+- Search and pagination on tasks
+- Database seed with demo data
+- Unit tests for auth and board endpoints
+
+**Frontend (React + TanStack Query)**
+- Auth flow with persistent sessions (localStorage)
+- Full kanban board UI with drag-and-drop
+- Task creation, editing, deletion, and movement
+- Task detail modal with comments section
+- Board management (create, list, delete)
+- Loading and error states throughout
+
+**Key Design Decisions:**
+- SQLite for zero-config local development
+- JWT for stateless authentication
+- Position-based ordering for drag-and-drop
+- Inline styles for simplicity (can be refactored to Tailwind)
+- React Query for data fetching and caching
+
+See [IMPLEMENTATION.md](./IMPLEMENTATION.md) for full technical details and architectural decisions.
+
+### Demo Video Guidelines
+
+A 3-5 minute video should demonstrate:
+1. Register/login flow
+2. Create a board and add tasks
+3. Drag a task between columns
+4. Open task detail and add a comment
+5. Run tests and show passing results
+6. Briefly discuss 1-2 key tradeoffs
+
+### Known Limitations
+
+- SQLite doesn't scale to high concurrency (use PostgreSQL for production)
+- Drag-and-drop has limited keyboard accessibility
+- No real-time sync (multiple users see stale data)
+- Search is basic substring matching
+- No user invitations/sharing beyond board ownership
+
+All limitations are documented in [IMPLEMENTATION.md](./IMPLEMENTATION.md).
