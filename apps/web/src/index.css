@@ -1,0 +1,328 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Background layers */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    /* Muted surfaces */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    
+    /* Primary - Indigo */
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    
+    /* Accent */
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Success */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    /* Borders and inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 239 84% 67%;
+    
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Radius */
+    --radius: 0.5rem;
+    
+    /* Kanban specific */
+    --column-bg: 210 40% 98%;
+    --task-bg: 0 0% 100%;
+    --task-hover: 210 40% 98%;
+    --drag-overlay: 239 84% 67% / 0.1;
+    
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Background layers */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    
+    /* Card surfaces */
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    
+    /* Muted surfaces */
+    --muted: 217 33% 12%;
+    --muted-foreground: 215 20% 65%;
+    
+    /* Primary - Indigo */
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary */
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    /* Accent */
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    
+    /* Destructive */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    
+    /* Success */
+    --success: 142 71% 29%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning */
+    --warning: 38 92% 40%;
+    --warning-foreground: 0 0% 100%;
+    
+    /* Borders and inputs */
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 239 84% 67%;
+    
+    /* Popover */
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Kanban specific */
+    --column-bg: 217 33% 10%;
+    --task-bg: 222 47% 8%;
+    --task-hover: 217 33% 12%;
+    --drag-overlay: 239 84% 67% / 0.15;
+    
+    /* Sidebar */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Theme transition */
+  html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/50;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-card/80 backdrop-blur-lg border border-border/50;
+  }
+
+  /* Subtle card shadow */
+  .card-shadow {
+    box-shadow: 0 1px 3px 0 hsl(var(--foreground) / 0.05),
+                0 1px 2px -1px hsl(var(--foreground) / 0.05);
+  }
+
+  .card-shadow-hover {
+    box-shadow: 0 4px 6px -1px hsl(var(--foreground) / 0.08),
+                0 2px 4px -2px hsl(var(--foreground) / 0.05);
+  }
+
+  .card-shadow-lg {
+    box-shadow: 0 10px 15px -3px hsl(var(--foreground) / 0.08),
+                0 4px 6px -4px hsl(var(--foreground) / 0.05);
+  }
+
+  /* Drag overlay */
+  .drag-overlay {
+    @apply bg-primary/10 border-2 border-primary border-dashed rounded-lg;
+  }
+
+  /* Task card styles */
+  .task-card {
+    @apply bg-task rounded-lg p-3 card-shadow transition-all duration-200;
+  }
+
+  .task-card:hover {
+    @apply bg-task-hover card-shadow-hover;
+  }
+
+  .task-card.dragging {
+    @apply card-shadow-lg rotate-2 scale-105 opacity-90;
+  }
+
+  /* Column styles */
+  .kanban-column {
+    @apply bg-column rounded-xl p-3 min-h-[200px];
+  }
+
+  /* Skeleton loading animation */
+  .skeleton-pulse {
+    @apply animate-pulse bg-muted rounded;
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
+
+@layer utilities {
+  /* Custom colors as utilities */
+  .bg-column {
+    background-color: hsl(var(--column-bg));
+  }
+
+  .bg-task {
+    background-color: hsl(var(--task-bg));
+  }
+
+  .bg-task-hover {
+    background-color: hsl(var(--task-hover));
+  }
+
+  /* Animation utilities */
+  .animate-in {
+    animation: animate-in 0.2s ease-out;
+  }
+
+  .animate-out {
+    animation: animate-out 0.2s ease-in;
+  }
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes animate-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+
+  /* Slide animations */
+  .slide-in-left {
+    animation: slide-in-left 0.3s ease-out;
+  }
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Fade scale animation */
+  .fade-scale-in {
+    animation: fade-scale-in 0.2s ease-out;
+  }
+
+  @keyframes fade-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Shimmer effect for loading */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
