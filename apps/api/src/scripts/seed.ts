@@ -70,50 +70,128 @@ async function main() {
 
   console.log(`✅ Created 3 columns`);
 
-  // Create tasks
-  const task1 = await prisma.task.create({
-    data: {
-      name: "Set up project structure",
-      description:
-        "Initialize the repository and set up basic folder structure",
-      priority: "HIGH",
-      status: "DONE",
-      column_id: doneColumn.column_id,
-      author_id: user1.user_id,
-      task_order: 0,
-    },
-  });
+  // Create 10 tasks
+  const tasks = await Promise.all([
+    prisma.task.create({
+      data: {
+        name: "Set up project structure",
+        description:
+          "Initialize the repository and set up basic folder structure",
+        priority: "HIGH",
+        status: "DONE",
+        column_id: doneColumn.column_id,
+        author_id: user1.user_id,
+        task_order: 0,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Implement authentication",
+        description:
+          "Add JWT-based authentication with register and login endpoints",
+        priority: "HIGH",
+        status: "IN_PROGRESS",
+        column_id: inProgressColumn.column_id,
+        author_id: user1.user_id,
+        task_order: 0,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Build board UI",
+        description: "Create the kanban board interface with drag and drop",
+        priority: "MEDIUM",
+        status: "TODO",
+        column_id: todoColumn.column_id,
+        author_id: user2.user_id,
+        task_order: 0,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Write unit tests",
+        description: "Add unit tests for services and controllers",
+        priority: "MEDIUM",
+        status: "TODO",
+        column_id: todoColumn.column_id,
+        author_id: user1.user_id,
+        task_order: 1,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Set up CI/CD",
+        description:
+          "Configure GitHub Actions for automated testing and deployment",
+        priority: "LOW",
+        status: "IN_PROGRESS",
+        column_id: inProgressColumn.column_id,
+        author_id: user2.user_id,
+        task_order: 1,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Add user profile page",
+        description: "Allow users to view and edit their profile",
+        priority: "LOW",
+        status: "TODO",
+        column_id: todoColumn.column_id,
+        author_id: user2.user_id,
+        task_order: 2,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Integrate notifications",
+        description: "Send email notifications for important events",
+        priority: "MEDIUM",
+        status: "IN_PROGRESS",
+        column_id: inProgressColumn.column_id,
+        author_id: user1.user_id,
+        task_order: 2,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Refactor API routes",
+        description: "Organize API endpoints for better maintainability",
+        priority: "LOW",
+        status: "DONE",
+        column_id: doneColumn.column_id,
+        author_id: user2.user_id,
+        task_order: 1,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Improve accessibility",
+        description: "Ensure the app is accessible to all users",
+        priority: "MEDIUM",
+        status: "IN_PROGRESS",
+        column_id: inProgressColumn.column_id,
+        author_id: user2.user_id,
+        task_order: 3,
+      },
+    }),
+    prisma.task.create({
+      data: {
+        name: "Optimize performance",
+        description: "Profile and optimize slow parts of the app",
+        priority: "HIGH",
+        status: "TODO",
+        column_id: todoColumn.column_id,
+        author_id: user1.user_id,
+        task_order: 3,
+      },
+    }),
+  ]);
 
-  const task2 = await prisma.task.create({
-    data: {
-      name: "Implement authentication",
-      description:
-        "Add JWT-based authentication with register and login endpoints",
-      priority: "HIGH",
-      status: "IN_PROGRESS",
-      column_id: inProgressColumn.column_id,
-      author_id: user1.user_id,
-      task_order: 0,
-    },
-  });
-
-  const task3 = await prisma.task.create({
-    data: {
-      name: "Build board UI",
-      description: "Create the kanban board interface with drag and drop",
-      priority: "MEDIUM",
-      status: "TODO",
-      column_id: todoColumn.column_id,
-      author_id: user2.user_id,
-      task_order: 0,
-    },
-  });
-
-  // Create comments
+  // Create comments for the first three tasks
   await prisma.comment.create({
     data: {
       content: "Great work on setting this up!",
-      task_id: task1.task_id,
+      task_id: tasks[0].task_id,
       author_id: user2.user_id,
     },
   });
@@ -121,7 +199,7 @@ async function main() {
   await prisma.comment.create({
     data: {
       content: "Almost done with the login flow",
-      task_id: task2.task_id,
+      task_id: tasks[1].task_id,
       author_id: user1.user_id,
     },
   });
@@ -129,7 +207,7 @@ async function main() {
   await prisma.comment.create({
     data: {
       content: "We should use framer-motion for animations",
-      task_id: task3.task_id,
+      task_id: tasks[2].task_id,
       author_id: user1.user_id,
     },
   });

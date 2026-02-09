@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLogout } from "../store/services/auth.service";
 import { useAuthStore } from "../store/state/auth.store";
 import { APP_ROUTES } from "../data/route";
+import { baseService } from "../store/services/base.service";
 
 const Header = () => {
   const user = useAuthStore((state) => state.user);
@@ -13,10 +14,14 @@ const Header = () => {
       navigate(APP_ROUTES.LOGIN_PAGE);
     }, 50);
   };
+  const isAuthenticated = baseService.getToken() !== null;
 
   return (
     <header className="flex justify-between items-center p-4 bg-white border-b border-gray-300">
-      <Link to={"/"} className="text-3xl font-semibold cursor-pointer">
+      <Link
+        to={isAuthenticated ? APP_ROUTES.DASHBOARD_PAGE : APP_ROUTES.LOGIN_PAGE}
+        className="text-3xl font-semibold cursor-pointer"
+      >
         Dashboard
       </Link>
       <div className="flex items-center gap-4">
