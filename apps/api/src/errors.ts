@@ -6,7 +6,11 @@ export type ApiErrorCode =
   | "FORBIDDEN"
   | "NOT_FOUND"
   | "CONFLICT"
-  | "INTERNAL";
+  | "INTERNAL"
+  | "COLUMN_TASK_LIMIT_REACHED"
+  | "DUPLICATE_TITLE"
+  | "INVALID_DUE_DATE"
+  | "VALIDATION_ERROR";
 
 export type ApiError = {
   code: ApiErrorCode;

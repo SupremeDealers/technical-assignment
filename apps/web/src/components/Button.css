@@ -1,0 +1,19 @@
+/* Button styles are mostly in globals.css */
+/* This file is for any button-specific styles */
+
+.btn {
+  min-width: fit-content;
+  white-space: nowrap;
+}
+
+.btn-md {
+  height: 38px;
+}
+
+.btn-sm {
+  height: 30px;
+}
+
+.btn-lg {
+  height: 48px;
+}
