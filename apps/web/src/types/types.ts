@@ -1,0 +1,57 @@
+export interface Column {
+  id: string;
+  name: string;
+  order: number;
+  boardId: string;
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  position: number;
+  createdAt: Date;
+  updatedAt: Date;
+  boardId: string;
+  columnId: string;
+  authorId: string;
+  column: Column;
+}
+
+export interface Meta {
+  page: number;
+  limit: number;
+  total: number;
+  hasNext: boolean;
+}
+
+export interface Tasks {
+  tasks: Task[];
+  meta: Meta;
+}
+
+export interface Profile {
+  id: string;
+  email: string;
+  name: string;
+}
+
+export interface Board {
+  id: string;
+  name: string;
+  ownerId: string;
+  createdAt: string;
+  columns: Column[];
+}
+
+export interface Comment {
+  id: string;
+  body: string;
+  createdAt: Date;
+  taskId: string;
+  authorId: string;
+  author: {
+    id: string;
+    name: string;
+  };
+}

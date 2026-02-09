@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+
+  boards    Board[]
+  tasks     Task[]   @relation("CreatedTasks")
+  comments  Comment[]
+}
+
+model Board {
+  id        String   @id @default(uuid())
+  name      String
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  owner     User     @relation(fields: [ownerId], references: [id])
+  columns   Column[]
+  tasks     Task[]
+}
+
+model Column {
+  id      String @id @default(uuid())
+  name    String
+  order   Int
+
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id])
+
+  tasks   Task[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  boardId  String
+  columnId String
+  authorId String
+
+  board    Board  @relation(fields: [boardId], references: [id])
+  column   Column @relation(fields: [columnId], references: [id])
+  author   User   @relation("CreatedTasks", fields: [authorId], references: [id])
+
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  body      String
+  createdAt DateTime @default(now())
+
+  taskId    String
+  authorId  String
+
+  task      Task @relation(fields: [taskId], references: [id])
+  author    User @relation(fields: [authorId], references: [id])
+}

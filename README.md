@@ -1,174 +1,129 @@
-# Take‑Home Starter — React + Node (Mid-level)
+# Team Boards – Take-Home Assignment
 
-This repo is the **starter template** for the take‑home test “Team Boards” (tasks + comments).
-It gives candidates a consistent baseline (scripts, linting, tests, CI), while leaving the actual feature work to them.
+A small Kanban-style board application with authentication, tasks, and comments.
 
----
-
-## What the candidate builds (core scope)
-
-A small kanban-style board with **tasks** and **comments**, backed by a **Node API** (auth + REST) and a **React app**.
-
-### Core requirements (must-have)
-**Backend**
-- Node + TypeScript (Express or Fastify)
-- Local persistence (SQLite recommended)
-- Validation (e.g., Zod/Joi)
-- Auth (JWT or session cookie)
-- Pagination + search on tasks
-- Seed script creates demo board/columns/tasks/users
-- Consistent error shape
-
-**Frontend**
-- React + TypeScript (Vite)
-- Routing (any)
-- Data fetching/caching (TanStack Query or equivalent)
-- Auth screens (register/login)
-- Board UI (columns + task cards)
-- Create/edit task, move task between columns (DnD or dropdown)
-- Task details with comments + add comment
-- Loading/error/empty states
-- Basic accessibility (labels, keyboard, contrast)
-
-### Demo video (required)
-A **3–5 minute** screen recording that shows:
-1) Login/register flow  
-2) Create a task + move it between columns  
-3) Add a comment  
-4) Tests running (`pnpm test`) or CI status  
-5) One decision + tradeoff (30 seconds)
+Built as part of a take-home assessment using React and Node.js, with a focus on correctness, clarity, and developer experience rather than visual polish.
 
 ---
 
-## Submission logistics (recommended)
+## ✨ Features
 
-### Preferred: Starter repo + PR (consistent diffs)
-- Candidate works on a branch and opens a PR (or submits their repo link).
-- Reviewers evaluate diff, CI, and local run.
-
-> NOTE: If you prefer “repo + video” without PRs, that’s fine too — but you’ll lose the consistency of diff-based review.
-> A good compromise is **PR + video**.
-
-### IP / Fair play statement (include in the email)
-- This is a simulated exercise; the company will not ship the submission.
-- Candidate retains rights to their submission.
-- No proprietary code from past employers.
-- External libraries are fine; cite major references in README.
+- User authentication (register / login)
+- Kanban board with columns and tasks
+- Create, update, and move tasks between columns
+- Task search and pagination
+- Task comments
+- Loading, error, and empty states
+- Seeded demo data for quick testing
+- Basic backend tests
 
 ---
 
-## How to run this starter
+## 🧱 Tech Stack
 
-### Prereqs
-- Node (see `.nvmrc`)
-- pnpm (recommended)
+### Backend
 
-### Install
+- Node.js
+- Express
+- TypeScript
+- Prisma
+- SQLite (local persistence)
+- JWT authentication
+- Zod validation
+- Vitest + Supertest (tests)
+
+### Frontend
+
+- React
+- Vite
+- TypeScript
+- TailwindCSS
+- TanStack Query
+- React Router
+- Axios
+
+---
+
+## 📂 Project Structure (simplified)
+
+apps/
+api/ # Backend (Express + Prisma)
+web/ # Frontend (React + Vite)
+
+---
+
+## ⚙️ Setup Instructions
+
+### Requirements
+
+- Node.js 22+
+- pnpm
+
+### Install dependencies
+
+From the repo root:
+
 ```bash
 pnpm install
-```
 
-### Dev (runs both apps)
-```bash
+🗄 Database Setup
+
+From apps/api:
+
+npx prisma migrate dev
+npx prisma db seed
+
+# This will create the SQLite database and seed demo data (user, board, columns, tasks, comments).
+
+🔐 Demo Credentials
+
+Email: dmj@dev.co
+Password: password123
+
+▶️ Running the App
+
+From the repo root:
+
 pnpm dev
+
+Frontend: http://localhost:5173
+
+Backend API: http://localhost:4000
 ```
 
-- API: http://localhost:4000 (health: `/health`)
-- Web: http://localhost:5173
+## 🧪 Tests
 
-### Tests / Lint / Build
-```bash
+Basic backend tests are included.
+
+From the repo root or apps/api:
+
 pnpm test
-pnpm lint
-pnpm typecheck
-pnpm build
-```
 
----
+Tests cover:
 
-## What’s included vs. what’s intentionally missing
+Health check endpoint
 
-✅ Included
-- Monorepo workspace wiring
-- API skeleton (Express) with health route and a consistent error helper
-- React skeleton with TanStack Query wired
-- Example tests (API + Web)
-- ESLint/Prettier baseline
-- GitHub Actions CI workflow
+Authenticated task listing
 
-🚫 Intentionally missing (candidate implements)
-- Auth (register/login, password hashing, JWT/cookies)
-- DB schema + migrations + seed data
-- All “Team Boards” endpoints and UI
+Unauthorized access rejection
 
----
 
-## Evaluation rubric (100 pts)
+### 🧠 Assumptions & Tradeoffs
 
-**Architecture & Code Quality (25)**
-- Structure, readability, separation of concerns, types
+Single board per user for MVP scope
 
-**Backend (25)**
-- REST design, validation, auth, pagination/search, error handling
+Task movement implemented using a dropdown instead of full drag-and-drop
 
-**Frontend (25)**
-- UX flow end-to-end, data fetching/mutations, states, accessibility
+SQLite used for simplicity and easy local setup
 
-**Testing & Tooling (15)**
-- Meaningful tests, lint/typecheck/build passing
+Minimal styling focused on usability and clarity
 
-**Polish & Product Thinking (10)**
-- README clarity, tradeoffs, small UX touches
+### 📦 External Libraries
 
----
+Prisma
 
-## API contract expectations (guide)
+TanStack Query
 
-Error shape:
-```json
-{
-  "error": {
-    "code": "BAD_REQUEST",
-    "message": "Invalid payload",
-    "details": [{ "path": "title", "issue": "Required" }]
-  }
-}
-```
+TailwindCSS
 
----
-
-## Suggested endpoints (candidate implements)
-
-Auth:
-- POST `/auth/register`
-- POST `/auth/login`
-
-Boards:
-- GET `/boards/:boardId`
-- GET `/boards/:boardId/columns` (include tasks count)
-- POST `/boards/:boardId/columns`
-
-Columns:
-- PATCH `/columns/:columnId`
-- DELETE `/columns/:columnId`
-
-Tasks:
-- GET `/columns/:columnId/tasks?search=&page=&limit=&sort=createdAt|priority`
-- POST `/columns/:columnId/tasks`
-- PATCH `/tasks/:taskId` (partial updates + moving columns)
-- DELETE `/tasks/:taskId`
-
-Comments:
-- GET `/tasks/:taskId/comments`
-- POST `/tasks/:taskId/comments`
-
----
-
-## Reviewer quick checklist (internal)
-- `pnpm install && pnpm dev` works
-- Auth works and blocks unauth’d access
-- Create/edit/move task works
-- Search + pagination works
-- Comments view/add works
-- CI is green; tests are meaningful
-- README explains tradeoffs + known limitations
+Axios
