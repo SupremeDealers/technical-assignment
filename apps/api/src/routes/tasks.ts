@@ -20,7 +20,7 @@ router.get("/columns/:columnId/tasks", (req: Request, res: Response) => {
     return sendError(res, 400, {
       code: "BAD_REQUEST",
       message: "Invalid query parameters",
-      details: parsed.error.errors.map((e) => ({ path: e.path.join("."), issue: e.message })),
+      details: parsed.error.issues.map((e: any) => ({ path: e.path.join("."), issue: e.message })),
     });
   }
 
