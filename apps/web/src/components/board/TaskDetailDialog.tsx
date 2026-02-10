@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Task, Comment } from "@/types";
+import { Task } from "@/types";
 import { client } from "@/api/client";
-import { Badge } from "@/components/ui/badge";
+
 import { Loader2, Trash2, Send, MessageSquare, Flag, AlertCircle, Zap, Clock, ChevronDown } from "lucide-react";
 import {
     DropdownMenu,

@@ -7,7 +7,6 @@ import {
     useSensor,
     useSensors,
     PointerSensor,
-    closestCenter,
     DragStartEvent,
     DragOverEvent,
     DragEndEvent,

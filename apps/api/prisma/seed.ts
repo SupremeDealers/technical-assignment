@@ -26,7 +26,7 @@ async function main() {
         },
     });
 
-    const user2 = await prisma.user.create({
+    const _user2 = await prisma.user.create({
         data: {
             name: 'Bob Smith',
             email: 'bob@example.com',
@@ -34,7 +34,7 @@ async function main() {
         },
     });
 
-    const user3 = await prisma.user.create({
+    const _user3 = await prisma.user.create({
         data: {
             name: 'Charlie Davis',
             email: 'charlie@example.com',
@@ -92,7 +92,7 @@ async function main() {
         },
     });
 
-    const task2 = await prisma.task.create({
+    const _task2 = await prisma.task.create({
         data: {
             columnId: todoColumn.id,
             title: 'Update API documentation',
@@ -154,7 +154,7 @@ async function main() {
         },
     });
 
-    const task8 = await prisma.task.create({
+    const _task8 = await prisma.task.create({
         data: {
             columnId: doneColumn.id,
             title: 'Initialize project structure',
@@ -164,7 +164,7 @@ async function main() {
         },
     });
 
-    const task9 = await prisma.task.create({
+    const _task9 = await prisma.task.create({
         data: {
             columnId: doneColumn.id,
             title: 'Configure ESLint and Prettier',
@@ -174,7 +174,7 @@ async function main() {
         },
     });
 
-    const task10 = await prisma.task.create({
+    const _task10 = await prisma.task.create({
         data: {
             columnId: doneColumn.id,
             title: 'Add health check endpoint',

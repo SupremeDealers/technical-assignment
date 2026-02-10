@@ -25,6 +25,7 @@ export async function middleware(req: Request, res: Response, next: NextFunction
             return res.status(400).json({ message: "You are not loggen in" })
         }
     } catch (e) {
+        console.error("Invalid token", e)
         return res.status(500).json({ message: "Invalid token" })
 
     }

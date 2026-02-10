@@ -1,7 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardTitle } from "@/components/ui/card";
 import { MessageSquare, Flag, AlertCircle, Zap, ChevronDown } from "lucide-react";
 import { Task } from "@/types";
 import { cn } from "@/lib/utils";

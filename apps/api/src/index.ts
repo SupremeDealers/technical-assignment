@@ -2,8 +2,6 @@ import express from "express";
 import cors from "cors";
 import { sendError } from "./errors";
 import { configDotenv } from "dotenv";
-import { prisma } from "./utilities/db";
-import types from "../types"
 import { mainRouter } from "./routes";
 configDotenv();
 
