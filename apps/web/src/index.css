@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Modern Vibrant SaaS Theme */
+    --background: 220 25% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Vibrant Indigo */
+    --primary: 234 85% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Soft Purple */
+    --secondary: 250 30% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted - Clean gray with slight blue tint */
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 13% 45%;
+
+    /* Accent - Electric Purple */
+    --accent: 262 80% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 56%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 234 85% 55%;
+
+    --radius: 10px;
+
+    /* Vibrant Priority Colors */
+    --priority-low: 145 70% 40%;
+    --priority-low-bg: 145 70% 95%;
+    --priority-low-border: 145 70% 75%;
+
+    --priority-medium: 38 100% 50%;
+    --priority-medium-bg: 38 100% 94%;
+    --priority-medium-border: 38 100% 70%;
+
+    --priority-high: 0 90% 55%;
+    --priority-high-bg: 0 90% 96%;
+    --priority-high-border: 0 90% 80%;
+
+    /* Custom design tokens */
+    --success: 145 70% 42%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+    --chart-1: 234 85% 55%;
+    --chart-2: 262 80% 55%;
+    --chart-3: 145 70% 42%;
+    --chart-4: 38 100% 50%;
+    --chart-5: 0 90% 55%;
+  }
+
+  .dark {
+    --background: 220 15% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 15% 11%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 15% 11%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 217 63% 47%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 13% 30%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 210 13% 60%;
+
+    --accent: 217 63% 47%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 217 63% 47%;
+
+    /* Premium Priority Colors - Dark Mode */
+    --priority-low: 220 60% 60%;
+    --priority-low-bg: 220 60% 15%;
+    --priority-low-border: 220 60% 30%;
+
+    --priority-medium: 38 95% 60%;
+    --priority-medium-bg: 38 80% 15%;
+    --priority-medium-border: 38 80% 30%;
+
+    --priority-high: 0 85% 65%;
+    --priority-high-bg: 0 70% 15%;
+    --priority-high-border: 0 70% 30%;
+
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  /* Typography utilities for professional web apps */
+  .text-label {
+    @apply text-xs font-medium uppercase tracking-wider text-muted-foreground;
+  }
+
+  .text-data {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  /* Glassmorphic effect */
+  .glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Elevated shadow levels */
+  .shadow-level-1 {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .shadow-level-2 {
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .shadow-level-3 {
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  /* Premium glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px -5px hsl(var(--accent) / 0.5);
+  }
+
+  /* Animated gradient */
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  /* Custom scrollbar - thinner */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 2px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.4);
+  }
+
+  /* Hide scrollbar until hover */
+  .custom-scrollbar {
+    scrollbar-gutter: stable;
+  }
+
+  /* Shimmer animation for skeletons */
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Smooth drag transitions */
+  .drag-transition {
+    transition:
+      transform 150ms cubic-bezier(0.25, 0.1, 0.25, 1),
+      opacity 150ms ease-out;
+  }
+
+  /* Sortable items smooth repositioning */
+  [data-sortable-item] {
+    transition: transform 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  /* When actively being sorted, reduce transition for snappier feel */
+  [data-sortable-item][data-is-dragging="true"] {
+    transition: none;
+  }
+}
