@@ -29,10 +29,6 @@ app.use("/columns", requireAuth, columnsRouter);
 app.use("/", requireAuth, tasksRouter);
 app.use("/", requireAuth, commentsRouter);
 
-/**
- * Example: how we want errors shaped.
- * Candidates should re-use this for their implementation.
- */
 app.use((req: Request, res: Response) => {
   sendError(res, 404, {
     code: "NOT_FOUND",

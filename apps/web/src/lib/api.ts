@@ -14,7 +14,7 @@ export class ApiErrorResponse extends Error {
   }
 }
 
-export async function apiFetch<T>(path: string, options: RequestInit = {}) {
+export async function apiFetch<T>(path: string, options: globalThis.RequestInit = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: {

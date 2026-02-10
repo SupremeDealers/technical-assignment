@@ -70,7 +70,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 
     (req as AuthedRequest).user = row;
     next();
-  } catch (error) {
+  } catch {
     sendError(res, 401, { code: "UNAUTHORIZED", message: "Invalid auth token" });
   }
 }
